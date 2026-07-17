@@ -1,0 +1,144 @@
+body {
+    margin: 0;
+    background-color: #3D2B1F;
+    color: #D9D2C3;
+    font-family: 'Cinzel', serif;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #151515;
+    color: #D9D2C3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    z-index: 10;
+}
+
+.nav-links a {
+    color: #D9D2C3;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.searchbar {
+    border: none;
+    min-width: 400px;
+    padding: 5px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.content {
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.overlay {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background-color: #151515;
+    color: #D9D2C3;
+    padding: 15px;
+    border-radius: 10px;
+    width: 350px;
+}
+
+.hidden {
+    display: none;
+}
+
+.product {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.product-name {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    padding: 12px 0;
+
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all .3s ease;
+}
+
+.product:hover .product-name {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product.tall {
+    width: 198px;
+    height: 358px;
+    min-width: 198px;
+    background-color: #D9D2C3;
+    color: #151515;
+    margin: 1px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px rgba(255, 140, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.product.skew {
+    transform: skew(-15deg);
+}
+
+.product.skew > * {
+    transform: skew(15deg);
+}
+
+.carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.carousel {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    width: 85.8%;
+    padding-left: 45px;
+}
+
+.arrow {
+    background-color: #151515;
+    color: #D9D2C3;
+    border: none;
+    font-size: 30px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
+}
+
+.arrow:hover {
+    background-color: #3D2B1F;
+}
+
+
+
