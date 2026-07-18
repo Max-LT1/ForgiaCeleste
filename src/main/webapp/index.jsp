@@ -1,10 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.CartItem" %>
-
 <%
-    List<CartItem> carrello = (List<CartItem>) session.getAttribute("carrello");
-    double totale = 0;
+    // LoginServlet deve salvare lo username nella sessione:
+    // session.setAttribute("username", username);
+    String username = (String) session.getAttribute("username");
+    boolean utenteLoggato = username != null && !username.trim().isEmpty();
+
 %>
 <!DOCTYPE html>
 <html lang="it">
@@ -12,7 +12,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Forgia Celeste</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/style-home.css">
     <!--<link rel="stylesheet" href="responsive.css">-->
 </head>
 <body>
@@ -28,58 +29,36 @@
         <a href="#">Contatti</a>
     </nav>
     <div class="user-area">
-        <span class="icon-user">👤</span>
+        <span class="icon-user" id="user-icon">👤</span>
         <span class="icon-cart" id="cart-icon">🛒</span>
     </div>
+
 </header>
 
-<!-- OVERLAY CARRELLO -->
-<div id="cart-overlay" class="overlay hidden" style="z-index: 10">
+<!-- OVERLAY UTENTE -->
+<div id="user-overlay" class="overlay hidden" role="dialog" aria-label="Area utente">
     <div class="overlay-content">
-        <h3>Carrello</h3>
-
-
-        <%
-            if(carrello != null && !carrello.isEmpty()){
-
-                for(CartItem item : carrello){
-                    totale += item.getTotale();
-        %>
-        <div class="prodotto">
-
-            <div class="info">
-                <span class="nome"><%= item.getNome() %></span>
-                <span class="prezzo">€ <%= item.getPrezzo() %></span>
-                <span>Quantità: <%= item.getQuantita() %></span>
-            </div>
-            <div>
-                € <%= item.getTotale() %>
-
-                <form action="RimuoviDalCarrello" method="post">
-                    <input type="hidden" name="nome" value="<%= item.getNome() %>">
-                    <button type="submit">Rimuovi</button>
-                </form>
-            </div>
-
-        </div>
-        <%
-            }
-        %>
-        <div class="totale">
-            Totale: € <%= totale %>
-        </div>
-        <%
-        }else{
-        %>
-        <p>Il carrello è vuoto.</p>
-        <%
-            }
-        %>
+        <h3>Profilo</h3>
+        <button type="button" class="overlay-close" data-close-overlay aria-label="Chiudi">&times;</button>
     </div>
-
-        <button class="btn-cart">Svuota Carrello</button>
-        <button class="btn-cart">Vai al Checkout</button>
+    <% if (utenteLoggato) { %>
+    <div class="user-summary">
+        <div class="user-avatar" aria-hidden="true">👤</div>
+        <div>
+            <span class="overlay-label">Bentornato</span>
+            <strong class="user-name"><%= username %></strong>
+        </div>
     </div>
+    <div class="overlay-actions">
+        <a class="overlay-button primary" href="profilo.jsp">Visualizza profilo</a>
+        <form action="LogoutServlet" method="post">
+            <button type="submit" class="overlay-button danger">Logout</button>
+        </form>
+    </div>
+    <% } else { %>
+    <p class="overlay-message">Accedi al tuo account oppure crea un nuovo profilo.</p>
+    <a class="overlay-button primary full-width" href="log-sign.jsp">Accedi / Registrati</a>
+    <% } %>
 </div>
 
 <main class="content">
@@ -176,18 +155,17 @@
 
     <section class="group">
         <h2>Sconti</h2>
-
         <div class="carousel-container">
             <button class="arrow left">&#9664;</button>
             <div class="carousel" id="carousel2">
                 <div class="product tall skew">
-                <div class="product-content">
-                    Prodotto 1
+                    <div class="product-content">
+                        Prodotto 1
+                    </div>
+                    <div class="product-name">
+                        Spada del Drago
+                    </div>
                 </div>
-                <div class="product-name">
-                    Spada del Drago
-                </div>
-            </div>
                 <div class="product tall skew">
                     <div class="product-content">
                         Prodotto 1
@@ -268,10 +246,8 @@
 
     <section class="group">
         <h2>Popolari</h2>
-
         <div class="carousel-container">
             <button class="arrow left">&#9664;</button>
-
             <div class="carousel" id="carousel3">
                 <div class="product tall skew">
                     <div class="product-content">
@@ -354,58 +330,22 @@
                     </div>
                 </div>
             </div>
-
             <button class="arrow right">&#9654;</button>
         </div>
     </section>
-
-
 </main>
-
 <footer class="footer">
     <p>© Forgia Medievale</p>
 </footer>
 
-<!-- CARRELLO -->
-<script>
-    const cartIcon = document.getElementById('cart-icon');
-    const overlay = document.getElementById('cart-overlay');
-
-    cartIcon.addEventListener('click', () => {
-        overlay.classList.toggle('hidden');
-    });
-</script>
+<!-- OVERLAY UTENTE -->
+<script src="scripts/user-overlay.js"></script>
 
 <!-- CAROSELLO -->
-<script>
-    function setupCarousel(carouselId) {
-        const carousel = document.getElementById(carouselId);
-        const left = carousel.parentElement.querySelector(".left");
-        const right = carousel.parentElement.querySelector(".right");
-
-        left.addEventListener("click", () => {
-            carousel.scrollLeft -= 400;
-        });
-
-        right.addEventListener("click", () => {
-            carousel.scrollLeft += 400;
-        });
-    }
-
-    setupCarousel("carousel1");
-    setupCarousel("carousel2");
-    setupCarousel("carousel3");
-</script>
+<script src="scripts/carosello.js"></script>
 
 <!-- PRODOTTI -->
-<script>
-    document.querySelectorAll(".product").forEach(card => {
-        card.addEventListener("click", () => {
-            const id = card.dataset.id;
-            window.location.href = `/prodotto?=${id}`;
-        });
-    });
-</script>
+<script src="scripts/prodotto.js"></script>
 
 </body>
 </html>
