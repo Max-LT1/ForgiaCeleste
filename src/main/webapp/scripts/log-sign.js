@@ -3,13 +3,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll("form");
 
-    const loginForm = Array.from(forms).find(
-        form => form.getAttribute("action") === "LoginServlet"
+    const loginCard = document.getElementById("loginCard");
+    const registerCard = document.getElementById("registerCard");
+
+    const showRegisterButton = document.getElementById(
+        "showRegisterButton"
     );
 
-    const registerForm = Array.from(forms).find(
-        form => form.getAttribute("action") === "RegisterServlet"
+    const showLoginButton = document.getElementById(
+        "showLoginButton"
     );
+
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
 
     if (loginForm) {
         inizializzaLogin(loginForm);
@@ -17,6 +23,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (registerForm) {
         inizializzaRegistrazione(registerForm);
+    }
+
+    if (
+        !loginCard ||
+        !registerCard ||
+        !showRegisterButton ||
+        !showLoginButton
+    ) {
+        return;
+    }
+
+    showRegisterButton.addEventListener("click", () => {
+        mostraRegistrazione();
+    });
+
+    showLoginButton.addEventListener("click", () => {
+        mostraLogin();
+    });
+
+    function mostraRegistrazione() {
+        nascondiCard(loginCard);
+        mostraCard(registerCard);
+
+        window.setTimeout(() => {
+            const primoCampo = registerCard.querySelector(
+                "input:not([type='hidden'])"
+            );
+
+            primoCampo?.focus();
+        }, 250);
+    }
+
+    function mostraLogin() {
+        nascondiCard(registerCard);
+        mostraCard(loginCard);
+
+        window.setTimeout(() => {
+            const primoCampo = loginCard.querySelector(
+                "input:not([type='hidden'])"
+            );
+
+            primoCampo?.focus();
+        }, 250);
+    }
+
+    function mostraCard(card) {
+        card.classList.remove("hidden-card");
+
+        card.setAttribute("aria-hidden", "false");
+
+        window.requestAnimationFrame(() => {
+            card.classList.add("active-card");
+        });
+    }
+
+    function nascondiCard(card) {
+        card.classList.remove("active-card");
+
+        card.setAttribute("aria-hidden", "true");
+
+        window.setTimeout(() => {
+            card.classList.add("hidden-card");
+        }, 250);
     }
 });
 
@@ -56,7 +125,6 @@ function inizializzaLogin(form) {
         }
     });
 }
-
 
 function inizializzaRegistrazione(form) {
     const nomeInput = form.querySelector('input[name="nome"]');
@@ -320,7 +388,6 @@ function validaPassword(input) {
     rimuoviErrore(input);
     return true;
 }
-
 
 function validaConfermaPassword(passwordInput, confermaInput) {
     if (confermaInput.value === "") {
