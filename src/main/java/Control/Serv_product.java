@@ -46,10 +46,11 @@ public class Serv_product extends HttpServlet {
         if(servletPath.equals("/HomePage")){
             List<Prodotto> prodotti;
             try {
-
+                prodotti = daoProdotto.getAllSconto();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            req.setAttribute("ListaSconti", prodotti);
         }
         if(servletPath.equals("/AdmCat")){
 
