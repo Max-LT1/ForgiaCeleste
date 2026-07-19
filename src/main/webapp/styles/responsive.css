@@ -1,0 +1,117 @@
+/* Tablet */
+@media (max-width: 1024px) {
+
+    .navbar {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .search-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .carousel {
+        padding-left: 20px;
+    }
+
+    .product.tall {
+        width: 130px;
+        height: 300px;
+    }
+
+    .arrow {
+        font-size: 24px;
+        padding: 8px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .navbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 10px;
+        padding: 15px;
+        align-items: center;
+    }
+
+    /* Searchbar larga al massimo */
+    .search-container {
+        grid-column: 1 / 3;
+        width: 100%;
+    }
+
+    .searchbar {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Icone sempre in alto a destra */
+    .user-area {
+        grid-column: 2;
+        justify-self: end;
+        display: flex;
+        gap: 10px;
+        font-size: 24px;
+    }
+
+    /* Link della navbar sotto */
+    .nav-links {
+        grid-column: 1 / 3;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* Carosello */
+    .carousel-container {
+        padding: 0 5px;
+    }
+
+    .carousel {
+        padding-left: 5px;
+    }
+
+    .product.tall {
+        width: 110px;
+        height: 260px;
+    }
+}
+
+
+/* Mobile molto piccolo */
+@media (max-width: 480px) {
+
+    .product.tall {
+        width: 95px;
+        height: 230px;
+    }
+
+    .arrow {
+        font-size: 18px;
+        padding: 5px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    .searchbar {
+        width: 90%;
+    }
+}
