@@ -201,6 +201,59 @@ public class DaoProdotto {
         }
     }
 
+//Prende tutti i prodotti con uno sconto
+public List<Prodotto> getAllSconto() throws SQLException{
+        String query = "SELECT * FROM prodotto WHERE sconto != 0";
+        try(Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();){
+            List<Prodotto> prodotti = new ArrayList<>();
+            while(resultSet.next()){
+                Prodotto prodotto = new Prodotto();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+                prodotto.setNomeProdotto(resultSet.getString("nome_prodotto"));
+                prodotto.setPrezzo(resultSet.getBigDecimal("prezzo"));
+                prodotto.setCategoria(resultSet.getString("categoria"));
+                prodotto.setTipo(resultSet.getString("tipo"));
+                prodotto.setMateriale(resultSet.getString("materiale"));
+                prodotto.setIva(resultSet.getInt("iva_p"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setPath_immagine(resultSet.getString("path_immagine"));
+                prodotto.setSconto(resultSet.getInt("sconto"));
+                prodotto.setDataInserimento(null);
+                prodotti.add(prodotto);
+            }
+            return prodotti;
+        }
+}
+    //recupera tutti i prodotti con uno sconto uguale o superiore alla ricerca
+    public List<Prodotto> getBySconto(int sconto) throws SQLException{
+        String query = "SELECT * FROM prodotto WHERE sconto >= ?";
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);){
+            statement.setInt(1, sconto);
+            ResultSet resultSet = statement.executeQuery();
+            List<Prodotto> prodotti = new ArrayList<>();
+            while(resultSet.next()){
+                Prodotto prodotto = new Prodotto();
+                prodotto.setIdProdotto(resultSet.getInt("ID_prodotto"));
+                prodotto.setNomeProdotto(resultSet.getString("nome_prodotto"));
+                prodotto.setPrezzo(resultSet.getBigDecimal("prezzo"));
+                prodotto.setCategoria(resultSet.getString("categoria"));
+                prodotto.setTipo(resultSet.getString("tipo"));
+                prodotto.setMateriale(resultSet.getString("materiale"));
+                prodotto.setIva(resultSet.getInt("iva_p"));
+                prodotto.setDescrizione(resultSet.getString("descrizione"));
+                prodotto.setPath_immagine(resultSet.getString("path_immagine"));
+                prodotto.setSconto(resultSet.getInt("sconto"));
+                prodotto.setDataInserimento(null);
+                prodotti.add(prodotto);
+            }
+            return prodotti;
+        }
+    }
+
+
     public void update(Prodotto p) throws SQLException {
         String query = "UPDATE prodotto SET ID_prodotto = ?, nome_prodotto = ?, prezzo = ?, descrizione = ?, categoria = ?, tipo = ?, iva_p = ?, materiale = ?, path_immagine = ?, data_Inserimento = ?, sconto = ? WHERE id_prodotto = ?";
         try(Connection connection = dataSource.getConnection();

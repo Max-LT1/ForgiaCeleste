@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/ContextCheck")
+@WebServlet
 public class Serv_CatCheck extends HttpServlet {
     private DataSource dataSource;
     private DaoProdotto daoProdotto;
