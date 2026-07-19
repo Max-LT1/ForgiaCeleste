@@ -51,6 +51,7 @@ public class Serv_product extends HttpServlet {
                 throw new RuntimeException(e);
             }
             req.setAttribute("ListaSconti", prodotti);
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
         if(servletPath.equals("/AdmCat")){
 

@@ -28,6 +28,7 @@ public class Serv_Carrello extends HttpServlet {
         }else{
             composizione = (List<Composizione>) session.getAttribute("carrello");
         }
+
     }
 
 }
