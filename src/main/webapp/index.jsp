@@ -12,27 +12,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Forgia Celeste</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="./styles/style-home.css">
-    <!--<link rel="stylesheet" href="responsive.css">-->
+    <link rel="stylesheet" href="styles/search-bar.css">
 </head>
 <body>
 <header class="navbar">
-    <div class="search-container">
-        <input type="text" placeholder="Cerca..." class="searchbar">
-    </div>
+    <form class="navbar-search" action="search.jsp" method="get">
+        <input class="searchbar" type="search" name="query" placeholder="Cerca nel Codex..." aria-label="Cerca prodotti">
+        <button class="search-button" type="submit" aria-label="Avvia ricerca">Cerca</button>
+    </form>
     <nav class="nav-links">
-        <a href="ContextCheck?Cat=Armi">Armi</a>
-        <a href="ContextCheck?Cat=Armatura">Armature</a>
-        <a href="ContextCheck?Cat=Scudi">Scudi</a>
-        <a href="ContextCheck?Cat=Accessori">Accessori</a>
-        <a href="ContextCheck?nome=Contatti">Contatti</a>
+        <a href="index.jsp" class="navbar-logo">Home</a>
+        <a href="codex.jsp?tipo=armi">Armi</a>
+        <a href="codex.jsp?tipo=armature">Armature</a>
+        <a href="codex.jsp?tipo=scudi">Scudi</a>
+        <a href="codex.jsp?tipo=accessori">Accessori</a>
+        <a href="contacts.jsp">Contatti</a>
     </nav>
     <div class="user-area">
         <span class="icon-user" id="user-icon">👤</span>
-        <span class="icon-cart" id="cart-icon">🛒</span>
+        <a href="cart.jsp" class="navbar-icon cart-link" aria-label="Apri il carrello">
+            <span class="icon-cart" id="cart-icon">🛒</span>
+        </a>
     </div>
-
 </header>
 
 <!-- OVERLAY UTENTE -->
@@ -50,7 +56,7 @@
         </div>
     </div>
     <div class="overlay-actions">
-        <a class="overlay-button primary" href="profilo.jsp">Visualizza profilo</a>
+        <a class="overlay-button primary" href="user-area.jsp">Visualizza profilo</a>
         <form action="LogoutServlet" method="post">
             <button type="submit" class="overlay-button danger">Logout</button>
         </form>
