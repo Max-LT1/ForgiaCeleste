@@ -187,9 +187,8 @@ function inizializzaRegistrazione(form) {
     });
 
     indirizzoInput.addEventListener("input", () => {
-        validaTesto(
+        validaIndirizzo(
             indirizzoInput,
-            5,
             "Inserisci un indirizzo valido."
         );
     });
@@ -244,9 +243,8 @@ function inizializzaRegistrazione(form) {
                 confermaPasswordInput
             ),
 
-            validaTesto(
+            validaIndirizzo(
                 indirizzoInput,
-                5,
                 "Inserisci un indirizzo valido."
             ),
 
@@ -426,6 +424,24 @@ function validaProvincia(input) {
 
     rimuoviErrore(input);
     return true;
+}
+
+function validaIndirizzo(input, messaggio){
+    const valore = input.value.trim();
+    const testoRegex = /^[\p{L}\p{N}\s'.,/°-]+$/u;
+
+    if (valore.length < 5) {
+        mostraErrore(input, messaggio);
+        return false;
+    }
+
+    if (!testoRegex.test(valore)) {
+        mostraErrore(
+            input,
+            "Il campo contiene caratteri non validi."
+        );
+        return false;
+    }
 }
 
 function validaCap(input) {
