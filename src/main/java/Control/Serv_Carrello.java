@@ -1,6 +1,7 @@
 package Control;
 
 
+import DAO.DBConnection;
 import DAO.DaoComposizione;
 import DAO.DaoProdotto;
 
@@ -31,11 +32,16 @@ public class Serv_Carrello extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private DaoProdotto daoProdotto;
 
+    @Override
+    public void init() {
+        daoProdotto = new DaoProdotto(DBConnection.getDataSource());
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         List<Composizione> composizione = null;
         if((Client) session.getAttribute("cliente") == null){
-            composizione = (List<Composizione>) session.getAttribute("guesscarrello");
+            composizione = (List<Composizione>) session.getAttribute("carrelloNoLog");
         }else{
             composizione = (List<Composizione>) session.getAttribute("carrello");
         }
@@ -54,21 +60,13 @@ public class Serv_Carrello extends HttpServlet {
                     }
                     JsonObject composizioneJson = new JsonObject();
                     composizioneJson.addProperty("path_immagine", product.getPath_immagine());
-
                     composizioneJson.addProperty("nomeProdotto", product.getIdProdotto());
                     composizioneJson.addProperty("descrizione", product.getDescrizione());
                     composizioneJson.addProperty("prezzo", product.getPrezzo());
-                    composizioneJson.addProperty("Categoria", product.getCategoria());
                     composizioneJson.addProperty("quantity", c.getQuantita_prodotto());
                     prezzoTotale.add(prezzoTotale.add(product.getPrezzo().multiply(BigDecimal.valueOf(c.getQuantita_prodotto()))));
-
                     composizioniJson.add(composizioneJson);
-
-                } catch (SQLException e) {
-                    String err = "Errore nel caricamento del carrello";
-                    response.sendError(500, err);
-                    return;
-                } catch (NullPointerException e) {
+                } catch (SQLException | NullPointerException e) {
                     String err = "Errore nel caricamento del carrello";
                     response.sendError(500, err);
                     return;
