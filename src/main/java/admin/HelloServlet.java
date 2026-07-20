@@ -1,4 +1,4 @@
-package com.example.esametsw;
+package admin;
 
 import java.io.*;
 import java.sql.Connection;
