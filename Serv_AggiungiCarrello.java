@@ -1,0 +1,89 @@
+package Control;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Client;
+import model.Composizione;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser; // O qualunque libreria usi per i JSON
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@WebServlet("/AggiungiCarrello")
+public class Serv_AggiungiCarrello extends HttpServlet {
+
+    private static final long serialVersionUID = 6L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try (BufferedReader reader = request.getReader()) {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+
+        JsonObject json = JsonParser.parseString(sb.toString()).getAsJsonObject();
+        int productId = json.get("prodottoId").getAsInt();
+        int quantita = json.get("quantita").getAsInt();
+
+        HttpSession session = request.getSession();
+
+        if (quantita <= 0 || quantita > 99) {
+            String errorMessage = "quantita non valida";
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            return;
+        }
+
+        Client client = (Client) session.getAttribute("cliente");
+
+        List<Composizione> carrello = null;
+
+        if (client == null) {
+            carrello = (List<Composizione>) session.getAttribute("carrelloNoLog");
+        } else {
+            carrello = (List<Composizione>) session.getAttribute("carrello");
+        }
+
+        if (carrello == null) {
+            carrello = new ArrayList<>();
+        }
+
+        boolean productExists = false;
+        for (Composizione composizione : carrello) {
+            if (composizione.getIdProdotto() == productId) {
+                productExists = true;
+                composizione.setQuantita_prodotto(quantita);
+                break;
+            }
+        }
+
+        if (!productExists) {
+            Composizione newComposizione = new Composizione();
+            newComposizione.setIdProdotto(productId);
+            newComposizione.setQuantita_prodotto(quantita);
+            if (client != null) {
+                newComposizione.setEmail(client.getEmail());
+                newComposizione.setUsername(client.getUsername());
+            }
+            carrello.add(newComposizione);
+        }
+
+        if (client == null) {
+            session.setAttribute("carrelloNoLog", carrello);
+        } else {
+            session.setAttribute("carrello", carrello);
+        }
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"success\": true}");
+    }
+}
