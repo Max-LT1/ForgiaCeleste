@@ -23,14 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     caricaCarrelloDallaSessione();
     decreaseButton?.addEventListener("click", () => {
-            const quantita = normalizzaQuantita(quantityInput.value);
-            quantityInput.value = Math.max(1, quantita - 1);
-        });
+        const quantita = normalizzaQuantita(quantityInput.value);
+        quantityInput.value = Math.max(1, quantita - 1);
+    });
 
     increaseButton?.addEventListener("click", () => {
-            const quantita = normalizzaQuantita(quantityInput.value);
-            quantityInput.value = Math.min(99, quantita + 1);
-        });
+        const quantita = normalizzaQuantita(quantityInput.value);
+        quantityInput.value = Math.min(99, quantita + 1);
+    });
 
     quantityInput.addEventListener("change", normalizzaInput);
     quantityInput.addEventListener("blur", normalizzaInput);
@@ -102,11 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
         const quantitaNormalizzata = normalizzaQuantita(quantita);
         const risposta = await inviaJson(endpointAggiornamento,
-                {
-                    prodottoId: idProdotto,
-                    quantita: quantitaNormalizzata
-                }
-            );
+            {
+                prodottoId: idProdotto,
+                quantita: quantitaNormalizzata
+            }
+        );
 
         if (risposta.success !== true) {
             throw new Error(risposta.message || "Impossibile aggiornare la quantità.");
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function aggiornaContatoreCarrello(numeroArticoli) {
         const contatori = document.querySelectorAll("#cartCounter, [data-cart-counter]");
         contatori.forEach(contatore => {
-            contatore.textContent = Number(numeroArticoli) || 0;
+                contatore.textContent = Number(numeroArticoli) || 0;
             }
         );
     }
@@ -181,10 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
         const elementiTotale = document.querySelectorAll("#cartTotalNavbar, [data-cart-total]");
         const totaleFormattato = new Intl.NumberFormat("it-IT", {
-                    style: "currency",
-                    currency: "EUR"
-                }
-            ).format(Number(prezzoTotale) || 0);
+                style: "currency",
+                currency: "EUR"
+            }
+        ).format(Number(prezzoTotale) || 0);
         elementiTotale.forEach(elemento => {
                 elemento.textContent = totaleFormattato;
             }
