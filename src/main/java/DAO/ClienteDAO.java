@@ -19,7 +19,7 @@ public class ClienteDAO {
     }
 
     public void addCliente(Client cliente) throws SQLException {
-        String query = "INSERT INTO Cliente (username, pwd, email, ruolo_cliente) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Cliente (username, pwd, email, ruolo_cliente,nome, cognome, indirizzo, citta, provincia, cap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String checkQuery = "SELECT COUNT(*) FROM Cliente WHERE username = ? OR email = ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -40,6 +40,12 @@ public class ClienteDAO {
             statement.setString(2, cliente.getPassword());
             statement.setString(3, cliente.getEmail());
             statement.setString(4, cliente.getRuolo_cliente());
+            statement.setString(5, cliente.getNome());
+            statement.setString(6, cliente.getCognome());
+            statement.setString(7, cliente.getIndirizzo());
+            statement.setString(8, cliente.getCitta());
+            statement.setString(9, cliente.getProvincia());
+            statement.setString(10, cliente.getCap());
 
             statement.executeUpdate();
         }

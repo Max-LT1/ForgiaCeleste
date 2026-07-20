@@ -22,19 +22,21 @@ public class Serv_register extends HttpServlet {
     private DataSource dataSource;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String email = request.getParameter("email");
 
         Client client = new Client();
-        client.setUsername(username);
-        client.setPassword(password);
-        client.setEmail(email);
+        client.setUsername(request.getParameter("username"));
+        client.setPassword(request.getParameter("password"));
+        client.setEmail(request.getParameter("email"));
         client.setRuolo_cliente("cliente");
-
+        client.setNome(request.getParameter("nome"));
+        client.setCognome(request.getParameter("cognome"));
+        client.setIndirizzo(request.getParameter("indirizzo"));
+        client.setCitta(request.getParameter("citta"));
+        client.setProvincia(request.getParameter("provincia"));
+        client.setCap(request.getParameter("cap"));
         try {
             clienteDAO.addCliente(client);
-            request.getRequestDispatcher("").forward(request, response);
+            request.getRequestDispatcher("user-area.jsp").forward(request, response);
         } catch (SQLException e) {
             if (e instanceof SQLIntegrityConstraintViolationException) {
                 // Errore utente già esistente
