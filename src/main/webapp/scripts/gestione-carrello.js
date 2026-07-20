@@ -1,36 +1,33 @@
-$(document).ready(function() {
-    $('.prodotto-quantita').on('input', function() {
-        var quantita = $(this).val();
-        var idProdotto = $(this).data('prodotto-id');
-        var tr = $(this).closest('article');
-        var errorText = tr.find('.error-text');
-        errorText.text('');
+function aggiungiAlCarrello(idPianta) {
+    // Prepariamo i parametri da inviare (simuliamo un piccolo form invisibile)
+    const params = new URLSearchParams();
+    params.append('action', 'aggiungi');
+    params.append('id', idPianta);
 
-        if (quantita < 1 || quantita > 99) {
-            errorText.text('la quantità deve essere maggiore di 1 e minore di 99.');
-            return;
-        }
+    // Facciamo la chiamata alla Servlet in modo invisibile
+    fetch('GestioneCarrello', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString()
+    })
+        .then(response => response.json()) // Trasformiamo la risposta in un oggetto JavaScript
+        .then(data => {
+            if (data.success) {
+                // Successo! Mostriamo un feedback all'utente
+                alert("🌱 Pianta aggiunta con successo!\nTotale articoli nel carrello: " + data.numeroArticoli);
 
-        $.ajax({
-            url : 'update-quantita',
-            type : 'POST',
-            dataType : 'json',
-            contentType : 'application/json',
-            data : JSON.stringify({
-                quantita : quantita,
-                idProdotto : idProdotto
-            }),
-            success : function(response) {
-                if (response.success) {
-                    tr.find('.prodotto-quantita').val(quantita);
-                    window.location.href = 'Cart';
-                } else {
-                    errorText.text(response.message);
-                }
-            },
-            error : function() {
-                errorText.text('An error occurred updating the quantita.');
+                // BONUS: Se hai un pallino col numero sul carrello nella navbar, si aggiornerebbe così:
+                // let badge = document.getElementById('cart-badge');
+                // if(badge) badge.innerText = data.numeroArticoli;
+            } else {
+                // La Servlet ha restituito un errore (es. pianta non trovata)
+                alert("⚠️ Errore: " + data.errore);
             }
+        })
+        .catch(error => {
+            console.error('Errore di comunicazione col server:', error);
+            alert("⚠️ Errore di comunicazione col server.");
         });
-    });
-});
+}
