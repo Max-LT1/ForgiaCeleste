@@ -7,7 +7,7 @@ import DAO.DaoProdotto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.mysql.cj.xdevapi.JsonArray;
+import com.google.gson.JsonArray;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +18,6 @@ import model.Client;
 import model.Composizione;
 import model.Ordine;
 import model.Prodotto;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -63,7 +62,7 @@ public class Serv_Ordini extends HttpServlet {
                 for (Composizione composizione : composizioni) {
                     JsonObject composizioneJson = new JsonObject();
 
-                    Prodotto prodotto = prodottoDAO.getOrderProduct(composizione.getIdProdotto());
+                    Prodotto prodotto = prodottoDAO.getProdottoById(composizione.getIdProdotto());
                     JsonObject prodottoJson = new JsonObject();
                     prodottoJson.addProperty("price", prodotto.getPrezzo().toString());
                     prodottoJson.addProperty("name", prodotto.getNomeProdotto());

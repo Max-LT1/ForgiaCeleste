@@ -35,7 +35,6 @@ public class Serv_CatCheck extends HttpServlet {
 
     public void init() throws ServletException {
         dataSource = DBConnection.getDataSource();
-        daoProdotto = new DaoProdotto();
-        daoProdotto.setDataSource(dataSource);
+        daoProdotto = new DaoProdotto(dataSource);
     }
 }
