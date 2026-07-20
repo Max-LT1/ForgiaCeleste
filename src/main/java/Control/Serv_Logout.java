@@ -29,13 +29,12 @@ public class Serv_Logout extends HttpServlet {
             if(session!=null){
 
                 List<Composizione> composizioneList = (List<Composizione>) session.getAttribute("composizioneList");
-
-                //salviamo la composizione prima di logout
+                
                 if(composizioneList!=null && !composizioneList.isEmpty()){
                     try {
                         composizioneDAO.saveAllComposizioni(composizioneList);
                         session.invalidate();
-                        response.sendRedirect("index.jsp");
+                        response.sendRedirect("HomePage");
                     } catch (SQLException e) {
                         String errorM = "Problema durante il logout, il carrello non è stato salvato\n" + e;
                         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorM);
@@ -47,10 +46,10 @@ public class Serv_Logout extends HttpServlet {
         }
         else if(serveletpath.equals("/foreLogoutServ")){
             session.invalidate();
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("HomePage");
         }
         session.invalidate();
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("HomePage");
     }
 
     public void init(){
