@@ -1,9 +1,8 @@
+<%@ page import="model.Client" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // LoginServlet deve salvare lo username nella sessione:
-    // session.setAttribute("username", username);
-    String username = (String) session.getAttribute("username");
-    boolean utenteLoggato = username != null && !username.trim().isEmpty();
+    Client cliente = (Client) session.getAttribute("cliente");
+    boolean utenteLoggato = cliente != null;
     String ctx = request.getContextPath();
 %>
 <header class="navbar">
@@ -37,7 +36,7 @@
         <div class="user-avatar" aria-hidden="true">👤</div>
         <div>
             <span class="overlay-label">Bentornato</span>
-            <strong class="user-name"><%= username %></strong>
+            <strong class="user-name"><%= cliente.getUsername() %></strong>
         </div>
     </div>
     <div class="overlay-actions">
