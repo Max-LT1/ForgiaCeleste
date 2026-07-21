@@ -157,6 +157,18 @@ public class DaoComposizione {
         }
     }
 
+    public void updateQuantitaProdotto(String username, String email, int idProdotto, int quantita) throws SQLException {
+        String query = "UPDATE composizione SET quantita = ? WHERE username_cli = ? AND email_cli = ? AND id_prodotto = ? AND id_ordine IS NULL";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, quantita);
+            statement.setString(2, username);
+            statement.setString(3, email);
+            statement.setInt(4, idProdotto);
+            statement.executeUpdate();
+        }
+    }
+
     public void updateComposizione(int orderId, String username, String email, BigDecimal price, int productId)
             throws SQLException {
         String query = "UPDATE Composizione SET id_ordine = ?, prezzo_prodotto = ? WHERE username_cli = ? AND email_cli = ? AND id_ordine IS NULL AND id_prodotto = ?";

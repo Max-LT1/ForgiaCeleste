@@ -45,10 +45,10 @@ public class Serv_Carrello extends HttpServlet {
         DaoComposizione composizioneDAO = new DaoComposizione(DBConnection.getDataSource());
         DaoProdotto prodottoDAO = new DaoProdotto(DBConnection.getDataSource());
 
-        // 1. RECUPERO ALLINEATO (Usiamo carrelloNoLog ovunque per gli ospiti)
+        // 1. RECUPERO CARRELLO (Loggato da DB, Ospite da Sessione)
         if (client != null) {
             try {
-                carrello = (List<Composizione>) composizioneDAO.getComposizioniByUsernameAndEmail(client.getUsername(), client.getEmail());
+                carrello = composizioneDAO.getComposizioniByUsernameAndEmail(client.getUsername(), client.getEmail());
                 session.setAttribute("carrello", carrello);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,7 +62,7 @@ public class Serv_Carrello extends HttpServlet {
             }
         }
 
-        // 2. COSTRUZIONE JSON CON ENTRAMBE LE CHIAVI (Per compatibilità JS e JSP)
+        // 2. COSTRUZIONE JSON E CALCOLO TOTALI
         int numeroArticoli = 0;
         BigDecimal prezzoTotale = BigDecimal.ZERO;
         JsonArray articoliArray = new JsonArray();
@@ -85,9 +85,8 @@ public class Serv_Carrello extends HttpServlet {
                         prodottoJson.addProperty("prezzo", prezzoBase);
                         prodottoJson.addProperty("path_immagine", prod.getPath_immagine());
 
-                        // Fondamentale: le inseriamo entrambe così nessuno si lamenta più!
-                        prodottoJson.addProperty("quantita_prodotto", comp.getQuantita_prodotto()); // Per la JSP
-                        prodottoJson.addProperty("quantita", comp.getQuantita_prodotto());          // Per il JS (prodotto.js riga 144)
+                        prodottoJson.addProperty("quantita_prodotto", comp.getQuantita_prodotto());
+                        prodottoJson.addProperty("quantita", comp.getQuantita_prodotto());
 
                         articoliArray.add(prodottoJson);
                     }
@@ -97,7 +96,7 @@ public class Serv_Carrello extends HttpServlet {
             }
         }
 
-        // 3. SPEDIZIONE
+        // 3. INVIO RISPOSTA
         if (isJsonRequest) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -108,10 +107,10 @@ public class Serv_Carrello extends HttpServlet {
             jsonResponse.add("articoli", articoliArray);
             response.getWriter().write(new Gson().toJson(jsonResponse));
         } else {
+            request.setAttribute("carrello", carrello); // 👈 PASSATO PER LA JSP (c:forEach)
             request.setAttribute("prezzoTotale", prezzoTotale);
             request.setAttribute("composizioniJson", articoliArray.toString());
             request.getRequestDispatcher("/cart.jsp").forward(request, response);
         }
     }
-
 }
