@@ -2,18 +2,10 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll("form");
-
     const loginCard = document.getElementById("loginCard");
     const registerCard = document.getElementById("registerCard");
-
-    const showRegisterButton = document.getElementById(
-        "showRegisterButton"
-    );
-
-    const showLoginButton = document.getElementById(
-        "showLoginButton"
-    );
-
+    const showRegisterButton = document.getElementById("showRegisterButton");
+    const showLoginButton = document.getElementById("showLoginButton");
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
 
@@ -25,12 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inizializzaRegistrazione(registerForm);
     }
 
-    if (
-        !loginCard ||
-        !registerCard ||
-        !showRegisterButton ||
-        !showLoginButton
-    ) {
+    if (!loginCard || !registerCard || !showRegisterButton || !showLoginButton) {
         return;
     }
 
@@ -132,8 +119,7 @@ function inizializzaRegistrazione(form) {
     const usernameInput = form.querySelector('input[name="username"]');
     const emailInput = form.querySelector('input[name="email"]');
     const passwordInput = form.querySelector('input[name="password"]');
-    const confermaPasswordInput = form.querySelector(
-        'input[name="confermaPassword"]'
+    const confermaPasswordInput = form.querySelector('input[name="confermaPassword"]'
     );
     const indirizzoInput = form.querySelector('input[name="indirizzo"]');
     const cittaInput = form.querySelector('input[name="citta"]');
@@ -187,8 +173,9 @@ function inizializzaRegistrazione(form) {
     });
 
     indirizzoInput.addEventListener("input", () => {
-        validaIndirizzo(
+        validaTesto(
             indirizzoInput,
+            5,
             "Inserisci un indirizzo valido."
         );
     });
@@ -243,8 +230,9 @@ function inizializzaRegistrazione(form) {
                 confermaPasswordInput
             ),
 
-            validaIndirizzo(
+            validaTesto(
                 indirizzoInput,
+                5,
                 "Inserisci un indirizzo valido."
             ),
 
@@ -287,7 +275,7 @@ function validaCampoObbligatorio(input, messaggio) {
 
 function validaTesto(input, lunghezzaMinima, messaggio) {
     const valore = input.value.trim();
-    const testoRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
+    const testoRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9' -]+$/;
 
     if (valore.length < lunghezzaMinima) {
         mostraErrore(input, messaggio);
@@ -426,24 +414,6 @@ function validaProvincia(input) {
     return true;
 }
 
-function validaIndirizzo(input, messaggio){
-    const valore = input.value.trim();
-    const testoRegex = /^[\p{L}\p{N}\s'.,/°-]+$/u;
-
-    if (valore.length < 5) {
-        mostraErrore(input, messaggio);
-        return false;
-    }
-
-    if (!testoRegex.test(valore)) {
-        mostraErrore(
-            input,
-            "Il campo contiene caratteri non validi."
-        );
-        return false;
-    }
-}
-
 function validaCap(input) {
     const valore = input.value.trim();
     const capRegex = /^\d{5}$/;
@@ -498,6 +468,7 @@ function mostraMessaggioGenerale(form, messaggio) {
     let elemento = form.querySelector(".form-error");
 
     if (!elemento) {
+        console.log(messaggio);
         elemento = document.createElement("div");
         elemento.className = "form-error";
         elemento.setAttribute("role", "alert");
