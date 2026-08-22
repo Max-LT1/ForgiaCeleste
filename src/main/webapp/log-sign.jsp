@@ -178,7 +178,6 @@
                             autocomplete="street-address"
                             required>
                 </div>
-
                 <div class="row">
                     <div class="input-group">
                         <label for="registerCity">
