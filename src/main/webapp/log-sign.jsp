@@ -30,7 +30,7 @@
                         Username
                     </label>
                     <input
-                            id="registerUsername"
+                            id="loginUsername"
                             type="text"
                             name="username"
                             autocomplete="username"

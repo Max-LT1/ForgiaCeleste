@@ -35,12 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (prodotti.length === 0) {
             return;
         }
-
         apriPopup({
             titolo: "Svuota il carrello",
             messaggio: "Vuoi davvero rimuovere tutti i prodotti dal carrello? Questa operazione non può essere annullata.",
             testoConferma: "Svuota carrello",
-            azione: svuotaCarrelloServer
+            azione: svuotaCarrelloPerProdottoServer
         });
     });
 
@@ -148,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function rimuoviProdottoServer(prodotto) {
         const idProdotto = prodotto.dataset.productId;
-
         try {
             const response = await fetch(ENDPOINTS.RIMUOVI_PRODOTTO, {
                 method: "POST",
@@ -174,32 +172,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function svuotaCarrelloServer() {
+
+    async function svuotaCarrelloAll(prodotto){
+        const idProdotto = prodotto.dataset.productId;
         try {
             const response = await fetch(ENDPOINTS.SVUOTA_CARRELLO, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({action: "svuota"})
+                body: JSON.stringify({action: "rimuovi", idProdotto: idProdotto})
             });
 
             const data = await response.json();
 
             if (data.success) {
-                const prodotti = document.querySelectorAll("[data-cart-item]");
-                prodotti.forEach(p => p.classList.add("cart-item-removing"));
-
+                prodotto.classList.add("cart-item-removing");
                 window.setTimeout(() => {
-                    prodotti.forEach(p => p.remove());
+                    prodotto.remove();
                     aggiornaInterfacciaLocali();
-                    aggiornaBadgeNavbar(0);
+                    aggiornaBadgeNavbar(data.numeroArticoli);
                 }, 300);
             } else {
-                alert("Errore nello svuotamento del carrello.");
+                alert("Errore nella rimozione: " + (data.errore || "Impossibile rimuovere"));
             }
         } catch (error) {
-            console.error("Errore durante lo svuotamento:", error);
+            console.error("Errore durante la rimozione del prodotto:", error);
             alert("⚠️ Errore di connessione al server.");
         }
+
+    }
+
+    async function svuotaCarrelloPerProdottoServer() {
+        const prodotti = document.querySelectorAll("[data-cart-item]");
+
+        prodotti.forEach(prodotto => {
+            svuotaCarrelloAll(prodotto);
+        })
     }
 
     // --- FUNZIONI DI CALCOLO E INTERFACCIA LOCALE ---

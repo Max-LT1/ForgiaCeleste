@@ -254,7 +254,7 @@ public List<Prodotto> getAllSconto() throws SQLException{
     }
 
     public List<Prodotto> getLatestadds(){
-        String query = "SELECT * FROM prodotto WHERE data_Inserimento >=NOW() - INTERVAL 4 MONTH";
+        String query = "SELECT * FROM prodotto WHERE data_Inserimento >=NOW() - INTERVAL 2 MONTH";
         try(Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();){
