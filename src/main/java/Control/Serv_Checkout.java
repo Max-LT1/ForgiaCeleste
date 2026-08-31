@@ -189,7 +189,7 @@ public class Serv_Checkout extends HttpServlet {
             return;
         }
 
-        response.sendRedirect("Ordini.jsp");
+        response.sendRedirect("");
     }
 
     @Override
