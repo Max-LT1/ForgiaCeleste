@@ -97,7 +97,7 @@
     if (percorsoImmagine.isBlank()) {
         urlImmagine = contextPath + "/images/placeholder.png";
     } else {
-        urlImmagine = contextPath + "/" + percorsoImmagine;
+        urlImmagine = percorsoImmagine;
     }
 %>
 

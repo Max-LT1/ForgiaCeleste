@@ -16,7 +16,25 @@
         <a href="<%= ctx %>/ContextCheck?categoria=armature">Armature</a>
         <a href="<%= ctx %>/ContextCheck?categoria=scudi">Scudi</a>
         <a href="<%= ctx %>/ContextCheck?categoria=accessori">Accessori</a>
+
+        <%
+            if(utenteLoggato){
+                if(cliente.getRuolo_cliente().equals("admin")){
+                    %>
+        <a href="<%=ctx%>/AdminOrdinePage">Ordini</a>
+        <a href="<%=ctx%>/AdmCat">Catalogo Admin</a>
+
+        <%
+                }
+            }
+        %>
+
+
+
         <a href="<%= ctx %>/contacts.jsp">Contatti</a>
+
+
+
     </nav>
     <div class="user-area">
         <span class="icon-user" id="user-icon" role="button" tabindex="0" aria-label="Apri area utente">👤</span>
