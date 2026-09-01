@@ -43,7 +43,7 @@ public class Serv_product extends HttpServlet {
                     mostraHome(req, resp);
                     break;
                 case "/AdmCat":
-                    //TODO
+                    AdmCart(req, resp);
                     break;
                 case "/SingleItem":
                     singleItem(req, resp);
@@ -93,5 +93,11 @@ public class Serv_product extends HttpServlet {
         Prodotto p = daoProdotto.getProdottoById(id);
         req.setAttribute("prodotto", p);
         req.getRequestDispatcher("/product.jsp").forward(req, resp);
+    }
+
+    private void AdmCart(HttpServletRequest req, HttpServletResponse resp)
+            throws SQLException, ServletException, IOException {
+        req.setAttribute("ListaProdotti", daoProdotto.listaProdottiAdmn());
+        req.getRequestDispatcher("/Admin/AdmCatalogo.jsp").forward(req, resp);
     }
 }
