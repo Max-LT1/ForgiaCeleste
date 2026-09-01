@@ -77,7 +77,9 @@
     gap: 9px;
 }
 
-.filter-button {
+.filter-button-category,
+.filter-button-type,
+.filter-button-material{
     padding: 9px 14px;
     border: 1px solid #756c5e;
     border-radius: 999px;
@@ -89,8 +91,13 @@
     transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
 }
 
-.filter-button:hover,
-.filter-button.active {
+
+.filter-button-category:hover,
+.filter-button-type:hover,
+.filter-button-material:hover,
+.filter-button-category.active,
+.filter-button-type.active,
+.filter-button-material.active {
     border-color: var(--codex-gold);
     background: var(--codex-gold);
     color: var(--codex-ink);
