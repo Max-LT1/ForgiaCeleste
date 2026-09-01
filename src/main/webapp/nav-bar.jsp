@@ -6,8 +6,8 @@
     String ctx = request.getContextPath();
 %>
 <header class="navbar">
-    <form class="navbar-search" action="search.jsp" method="get">
-        <input class="searchbar" type="search" name="query" placeholder="Cerca nel Codex..." aria-label="Cerca prodotti">
+    <form class="navbar-search" action="<%= ctx %>/ContextCheck?" method="get">
+        <input class="searchbar" type="search" name="ricerca" placeholder="Cerca nel Codex..." aria-label="Cerca prodotti" required>
         <button class="search-button" type="submit" aria-label="Avvia ricerca">Cerca</button>
     </form>
     <nav class="nav-links">

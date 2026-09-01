@@ -38,32 +38,45 @@
 <%
     String contextPath = request.getContextPath();
 
-    String categoria = (String) request.getAttribute("Categoria");
+    String macroCategoria = (String) request.getAttribute("Categoria");
+
+    String ricerca = (String) request.getAttribute("Ricerca");
 
     @SuppressWarnings("unchecked")
-    List<Prodotto> prodotti =
-            (List<Prodotto>) request.getAttribute("Lista");
+    List<Prodotto> prodotti = (List<Prodotto>) request.getAttribute("Lista");
+
+    @SuppressWarnings("unchecked")
+    Set<String> categorie = (Set<String>) request.getAttribute("Categorie");
 
     @SuppressWarnings("unchecked")
     Set<String> tipi = (Set<String>) request.getAttribute("Tipi");
 
+    @SuppressWarnings("unchecked")
+    Set<String> materiali = (Set<String>) request.getAttribute("Materiali");
+
     if (prodotti != null) {
         for (Prodotto prodotto : prodotti) {
-            if (
-                    prodotto != null &&
-                            prodotto.getTipo() != null &&
-                            !prodotto.getTipo().trim().isEmpty() &&
-                            !tipi.contains(prodotto.getTipo())
+            if (prodotto != null &&
+                    prodotto.getTipo() != null &&
+                    !prodotto.getTipo().trim().isEmpty() &&
+                    !tipi.contains(prodotto.getTipo())
             ) {
                 tipi.add(prodotto.getTipo().trim());
+            }
+            if (prodotto != null &&
+                    prodotto.getMateriale() != null &&
+                    !prodotto.getMateriale().trim().isEmpty() &&
+                    !materiali.contains(prodotto.getMateriale())
+            ) {
+                materiali.add(prodotto.getMateriale().trim());
             }
         }
     }
 
     String titoloCategoria =
-            categoria == null || categoria.trim().isEmpty()
+            macroCategoria == null || macroCategoria.trim().isEmpty()
                     ? "Tutti i prodotti"
-                    : categoria;
+                    : macroCategoria;
 
     NumberFormat formatoPrezzo =
             NumberFormat.getCurrencyInstance(Locale.ITALY);
@@ -98,14 +111,44 @@
         </div>
         <p id="result-count" class="result-count" aria-live="polite"></p>
     </header>
-    <section class="filter-panel" aria-label="Filtra prodotti per tipo">
-            <span class="filter-label">Filtra per tipo</span>
+    <%
+    if(ricerca != null) {
+    %>
+    <section class="filter-panel" aria-label="Filtra prodotti per categoria">
+        <span class="filter-label">Filtra per categoria</span>
         <div id="type-filters" class="filter-buttons">
-            <button type="button" class="filter-button active" data-filter="all">Tutti</button>
+            <button type="button" class="filter-button-category active" data-filter="all">Tutti</button>
+            <%
+                for (String singolacategoria : categorie) {
+            %>
+            <button type="button" class="filter-button-category" data-filter="<%= escapeHtml(singolacategoria) %>"><%= escapeHtml(singolacategoria) %></button>
+            <%
+                }
+            %>
+        </div>
+    </section>
+    <% } %>
+    <section class="filter-panel" aria-label="Filtra prodotti per tipo">
+        <span class="filter-label">Filtra per tipo</span>
+        <div id="type-filters" class="filter-buttons">
+            <button type="button" class="filter-button-type active" data-filter="all">Tutti</button>
             <%
                 for (String tipo : tipi) {
             %>
-            <button type="button" class="filter-button" data-filter="<%= escapeHtml(tipo) %>"><%= escapeHtml(tipo) %></button>
+            <button type="button" class="filter-button-type" data-filter="<%= escapeHtml(tipo) %>"><%= escapeHtml(tipo) %></button>
+            <%
+                }
+            %>
+        </div>
+    </section>
+    <section class="filter-panel" aria-label="Filtra prodotti per materiale">
+        <span class="filter-label">Filtra per materiale</span>
+        <div id="type-filters" class="filter-buttons">
+            <button type="button" class="filter-button-material active" data-filter="all">Tutti</button>
+            <%
+                for (String materiale : materiali) {
+            %>
+            <button type="button" class="filter-button-material" data-filter="<%= escapeHtml(materiale) %>"><%= escapeHtml(materiale) %></button>
             <%
                 }
             %>
@@ -119,7 +162,7 @@
                     ⚒
                 </span>
         <h2>Nessun prodotto trovato</h2>
-        <p>Non risultano oggetti disponibili per questa categoria.</p>
+        <p>Non risultano oggetti disponibili per questa ricerca.</p>
     </section>
     <%
     } else {
@@ -139,9 +182,19 @@
                                 ? prodotto.getNomeProdotto()
                                 : "Prodotto senza nome";
 
+                String categoria =
+                        prodotto.getCategoria() != null
+                                ? prodotto.getCategoria()
+                                : "Non specificato";
+
                 String tipo =
                         prodotto.getTipo() != null
                                 ? prodotto.getTipo()
+                                : "Non specificato";
+
+                String materiale =
+                        prodotto.getMateriale() != null
+                                ? prodotto.getMateriale()
                                 : "Non specificato";
 
                 String immagine =
@@ -149,7 +202,7 @@
 
                 String prezzoFormattato = formatoPrezzo.format(prodotto.getPrezzo());
         %>
-        <article class="codex-product" data-id="<%= escapeHtml(id) %>" data-tipo="<%= escapeHtml(tipo) %>">
+        <article class="codex-product" data-id="<%= escapeHtml(id) %>" data-categoria="<%= escapeHtml(categoria) %>" data-tipo="<%= escapeHtml(tipo) %>" data-materiale="<%= escapeHtml(materiale) %>">
             <a class="product-link" href="<%= contextPath %>/SingleItem?id=<%= id %>" aria-label="Apri <%= escapeHtml(nome) %>">
                 <div class="product-image-wrapper">
                     <img class="product-image" src="<%= escapeHtml(immagine) %>" alt="<%= escapeHtml(nome) %>" loading="lazy" onerror="this.onerror=null; this.src='<%= contextPath %>/images/placeholder-product.png';">
@@ -157,7 +210,7 @@
                 </div>
                 <div class="product-info">
                     <h2 class="product-title"><%= escapeHtml(nome) %></h2>
-                    <span class="product-type"><%= escapeHtml(tipo) %></span>
+                    <span class="product-type"><%= escapeHtml(tipo) %> - <%= escapeHtml(materiale) %> </span>
                 </div>
             </a>
         </article>
