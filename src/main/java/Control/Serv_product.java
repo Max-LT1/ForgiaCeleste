@@ -60,24 +60,64 @@ public class Serv_product extends HttpServlet {
             throws SQLException, ServletException, IOException {
 
         String categoria = req.getParameter("categoria");
-        if (categoria == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Categoria non specificata");
-            return;
-        }
-        List<Prodotto> prodotti = daoProdotto.prodottiPerCategoria(categoria);
-        if (prodotti == null) {
-            prodotti = new ArrayList<>();
-        }
-        Set<String> tipi = new LinkedHashSet<>();
-        for (Prodotto prodotto : prodotti) {
-            if (prodotto.getTipo() != null && !prodotto.getTipo().isBlank()) {
-                tipi.add(prodotto.getTipo());
+
+        String search = req.getParameter("ricerca");
+
+        List<Prodotto> prodotti = new ArrayList<>();
+        if(search != null) {
+            for (Prodotto prodotto : daoProdotto.ListaProdotti()) {
+                if(prodotto.getDescrizione().contains(search) ||
+                        prodotto.getNomeProdotto().contains(search) ||
+                        prodotto.getMateriale().contains(search) ||
+                        prodotto.getTipo().contains(search)) {
+                    prodotti.add(prodotto);
+                }
             }
+            Set<String> categorie = new LinkedHashSet<>();
+            Set<String> tipi = new LinkedHashSet<>();
+            Set<String> materiali = new LinkedHashSet<>();
+            for (Prodotto prodotto : prodotti) {
+                if (prodotto.getCategoria() != null && !prodotto.getCategoria().isBlank()) {
+                    categorie.add(prodotto.getCategoria());
+                }
+                if (prodotto.getTipo() != null && !prodotto.getTipo().isBlank()) {
+                    tipi.add(prodotto.getTipo());
+                }
+                if (prodotto.getMateriale() != null && !prodotto.getMateriale().isBlank()) {
+                    materiali.add(prodotto.getMateriale());
+                }
+            }
+
+            req.setAttribute("Ricerca", search);
+            req.setAttribute("Categoria", null);
+            req.setAttribute("Categorie", categorie);
+            req.setAttribute("Lista", prodotti);
+            req.setAttribute("Tipi", tipi);
+            req.setAttribute("Materiali", materiali);
+            req.getRequestDispatcher("/codex.jsp").forward(req, resp);
+        }else{
+            prodotti = daoProdotto.prodottiPerCategoria(categoria);
+            if (prodotti == null) {
+                prodotti = new ArrayList<>();
+            }
+            Set<String> tipi = new LinkedHashSet<>();
+            Set<String> materiali = new LinkedHashSet<>();
+            for (Prodotto prodotto : prodotti) {
+                if (prodotto.getTipo() != null && !prodotto.getTipo().isBlank()) {
+                    tipi.add(prodotto.getTipo());
+                }
+                if (prodotto.getMateriale() != null && !prodotto.getMateriale().isBlank()) {
+                    materiali.add(prodotto.getMateriale());
+                }
+            }
+            req.setAttribute("Ricerca", null);
+            req.setAttribute("Categoria", categoria);
+            req.setAttribute("Categorie", new LinkedHashSet<>());
+            req.setAttribute("Lista", prodotti);
+            req.setAttribute("Tipi", tipi);
+            req.setAttribute("Materiali", materiali);
+            req.getRequestDispatcher("/codex.jsp").forward(req, resp);
         }
-        req.setAttribute("Categoria", categoria);
-        req.setAttribute("Lista", prodotti);
-        req.setAttribute("Tipi", tipi);
-        req.getRequestDispatcher("/codex.jsp").forward(req, resp);
     }
 
     private void mostraHome(HttpServletRequest req, HttpServletResponse resp)
