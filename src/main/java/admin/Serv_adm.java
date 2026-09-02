@@ -63,17 +63,26 @@ public class Serv_adm extends HttpServlet {
             }
         } else if (servletPath.equals("/Update")) {
             try {
-                String name = request.getParameter("name");
+                String name = request.getParameter("prodName");
+                String category = request.getParameter("category");
+                String material = request.getParameter("material");
+                String tipo = request.getParameter("type");
+                int sconto = Integer.parseInt(request.getParameter("sconto"));
                 String description = request.getParameter("description");
-                BigDecimal price = new BigDecimal(request.getParameter("price"));
-                double iva = Double.parseDouble(request.getParameter("iva"));
-                String imagePath = request.getParameter("imagePath");
+                BigDecimal price = new BigDecimal(request.getParameter("prezzo"));
+
                 Prodotto existingProdotto = productDAO.getProdottoById(productId);
                 existingProdotto.setNomeProdotto(name);
-                existingProdotto.setDescrizione(description);
+                if(description!=null){
+                    existingProdotto.setDescrizione(description);
+                }
                 existingProdotto.setPrezzo(price);
-                existingProdotto.setIva(iva);
-                existingProdotto.setPath_immagine(imagePath);
+                if(category!=null){
+                    existingProdotto.setCategoria(category);
+                }
+                existingProdotto.setTipo(tipo);
+                existingProdotto.setSconto(sconto);
+                existingProdotto.setMateriale(material);
 
                 productDAO.update(existingProdotto);
 
@@ -83,7 +92,7 @@ public class Serv_adm extends HttpServlet {
                 return;
             }
         }
-        response.sendRedirect("AdminCatalogPage");
+        request.getRequestDispatcher("/CodexCheck").forward(request, response);
 
     }
 

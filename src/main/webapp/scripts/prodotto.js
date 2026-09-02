@@ -102,6 +102,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function inizializzaNormalProduct(){
+
+    }
+
+    function inizializzaModify(){
+
+    }
+
+
     async function aggiornaQuantitaCarrello(idProdotto, quantita
     ) {
         const quantitaNormalizzata = normalizzaQuantita(quantita);

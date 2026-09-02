@@ -281,7 +281,7 @@ public List<Prodotto> getAllSconto() throws SQLException{
     }
 
     public void update(Prodotto p) throws SQLException {
-        String query = "UPDATE prodotto SET ID_prodotto = ?, nome_prodotto = ?, prezzo = ?, descrizione = ?, categoria = ?, tipo = ?, iva_p = ?, materiale = ?, path_immagine = ?, data_Inserimento = ?, sconto = ? WHERE id_prodotto = ?";
+        String query = "UPDATE prodotto SET ID_prodotto = ?, nome_prodotto = ?, prezzo = ?, descrizione = ?, categoria = ?, tipo = ?, materiale = ?, path_immagine = ?, data_Inserimento = ?, sconto = ? WHERE id_prodotto = ?";
         try(Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(query);){
             statement.setInt(1, p.getIdProdotto());
@@ -290,11 +290,12 @@ public List<Prodotto> getAllSconto() throws SQLException{
             statement.setString(4, p.getDescrizione());
             statement.setString(5, p.getCategoria());
             statement.setString(6, p.getTipo());
-            statement.setDouble(7, p.getIva());
-            statement.setString(8, p.getMateriale());
-            statement.setString(9, p.getPath_immagine());
-            statement.setDate(10, (Date) p.getDataInserimento());
-            statement.setInt(11, p.getSconto());
+            statement.setString(7, p.getMateriale());
+            statement.setString(8, p.getPath_immagine());
+            statement.setDate(9, (Date) p.getDataInserimento());
+            statement.setInt(10, p.getSconto());
+            statement.setInt(11, p.getIdProdotto());
+            statement.executeUpdate();
         }
     }
 }

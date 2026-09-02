@@ -5,6 +5,7 @@
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.text.DecimalFormatSymbols" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="model.Client" %>
 
 <%!
     private String escapeHtml(String valore) {
@@ -35,6 +36,10 @@
 %>
 
 <%
+    Client cliente = (Client) session.getAttribute("cliente");
+    boolean utenteLoggato = cliente != null;
+    String ctx = request.getContextPath();
+
     String contextPath = request.getContextPath();
 
     Prodotto prodotto =
@@ -115,8 +120,76 @@
 <body data-context-path="<%= contextPath %>" data-product-id="<%= prodotto.getIdProdotto() %>">
 
 <jsp:include page="nav-bar.jsp" />
-
 <main class="product-page">
+    <!--Prodotto normale-->
+    <%
+        if(utenteLoggato){
+            if(cliente.getRuolo_cliente().equals("admin")){
+    %>
+    <section class="product-detail">
+        <!-- Colonna sinistra -->
+        <div class="product-image-section">
+            <img
+                    class="product-image"
+                    src="<%= urlImmagine %>"
+                    alt="<%= nomeProdotto %>"
+            >
+        </div>
+        <!-- Colonna destra -->
+        <div class="product-information">
+            <form action="Update" id="modificaForm" method="post">
+                <input type="hidden" name="clientToken" value="<%= session.getAttribute("sessionToken") %>">
+                <input type="hidden" name="prodottoId" value="<%= prodotto.getIdProdotto() %>">
+
+                <% if (!categoria.isBlank()) { %>
+            <input id="category" name="category" type="text" class="product-category" value="<%= categoria %>">
+            </input>
+            <% } %>
+
+            <input type="text" id= "prodName" name="prodName" class="product-name" value="<%= nomeProdotto %>">
+            <label>Prezzo originale</label>
+            <input type="number" id="prezzo" name="prezzo" value="<%=prezzoOriginale%>"><br>
+            <label>sconto</label>
+            <input type="number" id="sconto" name="sconto" value="<%=sconto%>">
+
+            <div class="product-description">
+                <h2>Descrizione</h2>
+
+                <textarea name="description" id="description" rows="5" cols="50">
+                    <%= descrizione %>
+                </textarea>
+            </div>
+
+            <% if (!materiale.isBlank()) { %>
+            <div class="product-property">
+                        <span class="property-label">
+                            Materiale:
+                        </span>
+
+                <input type="text" name="material" id="material" value="<%= materiale %>">
+            </div>
+            <% } %>
+
+            <% if (!tipo.isBlank()) { %>
+            <div class="product-property">
+                        <span class="property-label">
+                            Tipo:
+                        </span>
+
+                <input type="text" name="type" id="type" value="<%= tipo %>">
+            </div>
+            <% } %>
+
+            <div class="product-purchase-section">
+                <input type="submit" value="Submit">
+            </div>
+
+            </form>
+        </div>
+    </section>
+
+    <%
+            }else{%>
     <section class="product-detail">
 
         <!-- Colonna sinistra -->
@@ -204,7 +277,6 @@
                         </span>
             </div>
             <% } %>
-
             <div class="product-purchase-section">
                 <label
                         class="quantity-label"
@@ -254,6 +326,151 @@
             </div>
         </div>
     </section>
+
+    <%
+            }
+        }else{
+    %>
+
+    <section class="product-detail">
+
+        <!-- Colonna sinistra -->
+        <div class="product-image-section">
+            <img
+                    class="product-image"
+                    src="<%= urlImmagine %>"
+                    alt="<%= nomeProdotto %>"
+            >
+        </div>
+
+        <!-- Colonna destra -->
+        <div class="product-information">
+
+            <% if (!categoria.isBlank()) { %>
+            <p class="product-category">
+                <%= categoria %>
+            </p>
+            <% } %>
+
+            <h1 class="product-name">
+                <%= nomeProdotto %>
+            </h1>
+
+            <div class="product-price-container">
+
+                <% if (sconto > 0) { %>
+
+                <span class="original-price">
+                            <%= formatoPrezzo.format(
+                                    prezzoOriginale
+                            ) %>
+                        </span>
+
+                <span class="discounted-price">
+                            <%= formatoPrezzo.format(
+                                    prezzoFinale
+                            ) %>
+                        </span>
+
+                <span class="discount-badge">
+                            -<%= sconto %>%
+                        </span>
+
+                <% } else { %>
+
+                <span class="regular-price">
+                            <%= formatoPrezzo.format(
+                                    prezzoFinale
+                            ) %>
+                        </span>
+
+                <% } %>
+
+            </div>
+
+            <div class="product-description">
+                <h2>Descrizione</h2>
+
+                <p>
+                    <%= descrizione %>
+                </p>
+            </div>
+
+            <% if (!materiale.isBlank()) { %>
+            <div class="product-property">
+                        <span class="property-label">
+                            Materiale:
+                        </span>
+
+                <span>
+                            <%= materiale %>
+                        </span>
+            </div>
+            <% } %>
+
+            <% if (!tipo.isBlank()) { %>
+            <div class="product-property">
+                        <span class="property-label">
+                            Tipo:
+                        </span>
+
+                <span>
+                            <%= tipo %>
+                        </span>
+            </div>
+            <% } %>
+            <div class="product-purchase-section">
+                <label
+                        class="quantity-label"
+                        for="productQuantity"
+                >
+                    Quantità
+                </label>
+
+                <div class="quantity-selector">
+                    <button
+                            id="decreaseQuantity"
+                            class="quantity-button"
+                            type="button"
+                            aria-label="Diminuisci quantità"
+                    >
+                        −
+                    </button>
+
+                    <input
+                            id="productQuantity"
+                            class="quantity-input"
+                            type="number"
+                            value="1"
+                            min="1"
+                            max="99"
+                            inputmode="numeric"
+                            aria-label="Quantità da acquistare"
+                    >
+
+                    <button
+                            id="increaseQuantity"
+                            class="quantity-button"
+                            type="button"
+                            aria-label="Aumenta quantità"
+                    >
+                        +
+                    </button>
+                </div>
+
+                <button id="addToCartButton" class="add-to-cart-button" type="button">Aggiungi al carrello</button>
+                <p
+                        id="productMessage"
+                        class="product-message"
+                        role="status"
+                        aria-live="polite"
+                ></p>
+            </div>
+        </div>
+    </section>
+    <%
+        }
+    %>
 </main>
 
 <script src="<%=contextPath%>/scripts/prodotto.js" defer></script>
