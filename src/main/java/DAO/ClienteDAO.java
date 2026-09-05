@@ -46,7 +46,6 @@ public class ClienteDAO {
             statement.setString(8, cliente.getCitta());
             statement.setString(9, cliente.getProvincia());
             statement.setString(10, cliente.getCap());
-
             statement.executeUpdate();
         }
     }

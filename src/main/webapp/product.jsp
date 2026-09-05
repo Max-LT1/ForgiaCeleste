@@ -137,20 +137,23 @@
         </div>
         <!-- Colonna destra -->
         <div class="product-information">
-            <form action="Update" id="modificaForm" method="post">
+            <form class="input-form" action="Update" id="modificaForm" method="get">
                 <input type="hidden" name="clientToken" value="<%= session.getAttribute("sessionToken") %>">
                 <input type="hidden" name="prodottoId" value="<%= prodotto.getIdProdotto() %>">
 
                 <% if (!categoria.isBlank()) { %>
-            <input id="category" name="category" type="text" class="product-category" value="<%= categoria %>">
-            </input>
-            <% } %>
 
-            <input type="text" id= "prodName" name="prodName" class="product-name" value="<%= nomeProdotto %>">
-            <label>Prezzo originale</label>
-            <input type="number" id="prezzo" name="prezzo" value="<%=prezzoOriginale%>"><br>
-            <label>sconto</label>
-            <input type="number" id="sconto" name="sconto" value="<%=sconto%>">
+                <input id="category" name="category" type="text" class="product-category" value="<%= categoria %>">
+
+            <% } %>
+            <div class="input-group">
+                <input type="text" id= "prodName" name="prodName" class="product-name" value="<%= nomeProdotto %>">
+                <label>Prezzo originale</label>
+                <input type="number" id="prezzo" name="prezzo" value="<%=prezzoOriginale%>"><br>
+                <label>sconto</label>
+                <input type="number" id="sconto" name="sconto" value="<%=sconto%>">
+
+            </div>
 
             <div class="product-description">
                 <h2>Descrizione</h2>
@@ -165,8 +168,9 @@
                         <span class="property-label">
                             Materiale:
                         </span>
-
-                <input type="text" name="material" id="material" value="<%= materiale %>">
+                <div class="input-group">
+                    <input type="text" name="material" id="material" value="<%= materiale %>">
+                </div>
             </div>
             <% } %>
 
@@ -175,16 +179,18 @@
                         <span class="property-label">
                             Tipo:
                         </span>
-
-                <input type="text" name="type" id="type" value="<%= tipo %>">
+                <div class="input-group">
+                    <input type="text" name="type" id="type" value="<%= tipo %>">
+                </div>
             </div>
             <% } %>
 
             <div class="product-purchase-section">
-                <input type="submit" value="Submit">
+                <input type="submit" value="Submit" formaction="Update">
+                <input type="submit" value="Remove" formaction="Remove">
             </div>
-
             </form>
+            <a href="Remove"></a>
         </div>
     </section>
 

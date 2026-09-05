@@ -22,7 +22,7 @@
                 if(cliente.getRuolo_cliente().equals("admin")){
                     %>
         <a href="<%=ctx%>/AdminOrdinePage">Ordini</a>
-        <a href="<%=ctx%>/AdmCat">Catalogo Admin</a>
+        <a href="<%=ctx%>/Admin/AdmAdd.jsp">Aggiungi Prodotto</a>
 
         <%
                 }

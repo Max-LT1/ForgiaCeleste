@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             applyFilter(category, type, material);
         });
     });
-
+        
     typeButtons.forEach(button => {
         button.addEventListener("click", () => {
             typeButtons.forEach(item => {

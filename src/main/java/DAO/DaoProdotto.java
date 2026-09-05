@@ -19,20 +19,20 @@ public class DaoProdotto {
     }
     //creare un prodotto
     public void createProdotto(Prodotto prodotto) throws SQLException {
-        String query = "INSERT INTO prodotto (ID_Prodotto, nome_Prodotto, prezzo, descrizione, categoria, tipo, iva_p, materiale, path_immagine, data_inserto, sconto) " +
-                "VALUES (? ? ? ? ? ? ? ? ? ?)";
+        String query = "INSERT INTO prodotto (nome_Prodotto, prezzo, descrizione, categoria, tipo, iva_p, materiale, path_immagine, data_Inserimento, sconto) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, prodotto.getIdProdotto());
-            statement.setString(2, prodotto.getNomeProdotto());
-            statement.setBigDecimal(3, prodotto.getPrezzo());
-            statement.setString(4, prodotto.getDescrizione());
-            statement.setString(5, prodotto.getCategoria());
-            statement.setString(6, prodotto.getTipo());
-            statement.setDouble(7, prodotto.getIdProdotto());
-            statement .setString(8, prodotto.getMateriale());
-            statement.setString(9, prodotto.getPath_immagine());
-            statement.setDate(10, (Date) prodotto.getDataInserimento());
-            statement.setInt(11, prodotto.getSconto());
+            statement.setString(1, prodotto.getNomeProdotto());
+            statement.setBigDecimal(2, prodotto.getPrezzo());
+            statement.setString(3, prodotto.getDescrizione());
+            statement.setString(4, prodotto.getCategoria());
+            statement.setString(5, prodotto.getTipo());
+            statement.setDouble(6, prodotto.getIva());
+            statement .setString(7, prodotto.getMateriale());
+            statement.setString(8, prodotto.getPath_immagine());
+            java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
+            statement.setDate(9, sqlDate);
+            statement.setInt(10, prodotto.getSconto());
             statement.execute();
         }
         catch (SQLException ex) {

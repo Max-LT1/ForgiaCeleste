@@ -15,14 +15,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
-@WebServlet({ "/Update", "/Remove" })
+@WebServlet({ "/Update", "/Remove","/adminServ" })
 public class Serv_adm extends HttpServlet {
     private static final long serialVersionUID = 15L;
     private DaoComposizione cartItemDAO;
     private DaoProdotto productDAO;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String servletPath = request.getServletPath();
         HttpSession session = request.getSession();
@@ -53,8 +53,14 @@ public class Serv_adm extends HttpServlet {
 
         if (servletPath.equals("/Remove")) {
             try {
+                Prodotto prodotto = productDAO.getProdottoById(productId);
+                String cat = prodotto.getCategoria();
                 productDAO.deleteProdotto(productId);
+
                 cartItemDAO.removeAllDeletedItems(productId);
+
+
+                request.getRequestDispatcher("/ContextCheck?categoria=" + cat).forward(request, response);
 
             } catch (SQLException e) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -66,6 +72,7 @@ public class Serv_adm extends HttpServlet {
                 String name = request.getParameter("prodName");
                 String category = request.getParameter("category");
                 String material = request.getParameter("material");
+                String ogcat;
                 String tipo = request.getParameter("type");
                 int sconto = Integer.parseInt(request.getParameter("sconto"));
                 String description = request.getParameter("description");
@@ -77,22 +84,23 @@ public class Serv_adm extends HttpServlet {
                     existingProdotto.setDescrizione(description);
                 }
                 existingProdotto.setPrezzo(price);
+                ogcat = existingProdotto.getCategoria();
                 if(category!=null){
                     existingProdotto.setCategoria(category);
-                }
+                } else existingProdotto.setCategoria(ogcat);
                 existingProdotto.setTipo(tipo);
                 existingProdotto.setSconto(sconto);
                 existingProdotto.setMateriale(material);
 
                 productDAO.update(existingProdotto);
-
+                request.getRequestDispatcher("/SingleItem?id=" + productId).forward(request, response);
             } catch (SQLException e) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "An error occurred while updating product." + e);
                 return;
             }
         }
-        request.getRequestDispatcher("/CodexCheck").forward(request, response);
+
 
     }
 
