@@ -121,6 +121,8 @@
                     Aggiungi
                 </button>
             </form>
+        </section>
+    </div>
 </main>
 
 
