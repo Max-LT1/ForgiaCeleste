@@ -20,6 +20,8 @@
     opacity: 0;
     transform: translateY(100%);
     transition: all .3s ease;
+
+    z-index: 2;
 }
 
 .product:hover .product-name {

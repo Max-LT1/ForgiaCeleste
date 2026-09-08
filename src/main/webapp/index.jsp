@@ -42,10 +42,11 @@
                 <a href="<%= contextPath %>/SingleItem?id=<%= prodotto.getIdProdotto()%>">
                     <div class="product tall skew" >
                         <div class="product-name">
-                            <%= prodotto.getNomeProdotto()%>
+                            <%= prodotto.getNomeProdotto()%><br>
+                            <%= prodotto.getPrezzo()%>
                         </div>
                         <div class="product-price">
-                            <%= prodotto.getPrezzo()%>>
+                            <img src="<%=prodotto.getPath_immagine()%>" sizes="auto">
                         </div>
                     </div>
                 </a>
@@ -76,14 +77,15 @@
                     for (Prodotto prodotto : prodottiScontati) {
                 %>
                 <a href="<%= contextPath %>/SingleItem?id=<%= prodotto.getIdProdotto()%>">
-                    <div class="product tall skew">
+                    <article class="product tall skew">
                         <div class="product-name">
-                            <%= prodotto.getNomeProdotto()%>
-                        </div>
-                        <div class="product-prezzo">
+                            <%= prodotto.getNomeProdotto()%><br>
                             <%= prodotto.getPrezzo()%>
                         </div>
-                    </div>
+                        <div class="product-image-wrapper">
+                            <img class="product-image" src="<%=prodotto.getPath_immagine()%>" sizes="auto">
+                        </div>
+                    </article>
                 </a>
                 <% }
                     }%>

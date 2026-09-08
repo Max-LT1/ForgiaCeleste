@@ -5,6 +5,10 @@
     boolean utenteLoggato = cliente != null;
     String ctx = request.getContextPath();
 %>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 <header class="navbar">
     <form class="navbar-search" action="<%= ctx %>/ContextCheck?" method="get">
         <input class="searchbar" type="search" name="ricerca" placeholder="Cerca nel Codex..." aria-label="Cerca prodotti" required>
@@ -21,7 +25,7 @@
             if(utenteLoggato){
                 if(cliente.getRuolo_cliente().equals("admin")){
                     %>
-        <a href="<%=ctx%>/AdminOrdinePage">Ordini</a>
+        <a href="<%=ctx%>/Admin/AdmCatalogo.jsp">Ordini</a>
         <a href="<%=ctx%>/Admin/AdmAdd.jsp">Aggiungi Prodotto</a>
 
         <%
