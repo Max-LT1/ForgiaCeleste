@@ -2,13 +2,11 @@ package admin;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
-
-import DAO.ClienteDAO;
-import DAO.DBConnection;
-import DAO.DaoOrdine;
+import DAO.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +14,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Client;
+import model.Composizione;
 import model.Ordine;
+import model.Prodotto;
 
 @WebServlet("/AdminOrdinePage")
 
@@ -24,7 +24,8 @@ public class Serv_OrdiniAdm extends HttpServlet {
 
     private static final long serialVersionUID = 16L;
     private DaoOrdine orderDAO;
-    private ClienteDAO userDAO;
+    private DaoProdotto produtDAO;
+    private DaoComposizione compositionDAO;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,10 +46,23 @@ public class Serv_OrdiniAdm extends HttpServlet {
 
         }
         try {
-            List<Client> userList = userDAO.getAllUsers();
             List<Ordine> orderList = orderDAO.getAllOrdini();
-            request.setAttribute("clienteList", userList);
+            List<Composizione> compositionList = new ArrayList<>();
+            List<Prodotto> productList = new ArrayList<>();
+            if(!orderList.isEmpty()){
+                for(Ordine ordine : orderList) {
+                    compositionList = compositionDAO.getComposizioniByUsernameAndEmail(ordine.getUsernameCliente(), ordine.getEmailCliente());
+                }
+            }
+            if(!compositionList.isEmpty()){
+                for(Composizione composizione : compositionList) {
+                    productList.add(produtDAO.getProdottoById(composizione.getIdProdotto()));
+                }
+            }
+
             request.setAttribute("ordineList", orderList);
+            request.setAttribute("productList", productList);
+            request.setAttribute("compositionList", compositionList);
 
             request.getRequestDispatcher("admin/AdminOrdiniPage.jsp").forward(request, response);
         } catch (SQLException e) {
@@ -77,16 +91,12 @@ public class Serv_OrdiniAdm extends HttpServlet {
 
         }
         try {
-
-            List<Client> userList = userDAO.getAllUsers();
-
             List<Ordine> orderList = null;
             String selectedUsername = request.getParameter("selectedUsername");
             String fromDate = request.getParameter("fromDate");
             String toDate = request.getParameter("toDate");
             if (fromDate != null && !fromDate.isEmpty() && toDate != null && !toDate.isEmpty()
                     && selectedUsername != null && !selectedUsername.isEmpty()) {
-
                 java.sql.Date fromDateSql = java.sql.Date.valueOf(fromDate);
                 java.sql.Date toDateSql = java.sql.Date.valueOf(toDate);
                 orderList = orderDAO.getOrdini(fromDateSql, toDateSql, selectedUsername);
@@ -101,9 +111,22 @@ public class Serv_OrdiniAdm extends HttpServlet {
                 orderList = orderDAO.getAllOrdini();
 
             }
+            List<Composizione> compositionList = new ArrayList<>();
+            List<Prodotto> productList = new ArrayList<>();
+            if(!orderList.isEmpty()){
+                for(Ordine ordine : orderList) {
+                    compositionList = compositionDAO.getComposizioniByUsernameAndEmail(ordine.getUsernameCliente(), ordine.getEmailCliente());
+                }
+            }
+            if(!compositionList.isEmpty()){
+                for(Composizione composizione : compositionList) {
+                    productList.add(produtDAO.getProdottoById(composizione.getIdProdotto()));
+                }
+            }
 
-            request.setAttribute("clienteList", userList);
             request.setAttribute("ordineList", orderList);
+            request.setAttribute("productList", productList);
+            request.setAttribute("compositionList", compositionList);
 
             request.getRequestDispatcher("admin/AdminOrdiniPage.jsp").forward(request, response);
         } catch (SQLException e) {
@@ -114,7 +137,8 @@ public class Serv_OrdiniAdm extends HttpServlet {
 
     @Override
     public void init() {
-        userDAO = new ClienteDAO(DBConnection.getDataSource());
+        compositionDAO = new DaoComposizione(DBConnection.getDataSource());
+        produtDAO = new DaoProdotto(DBConnection.getDataSource());
         orderDAO = new DaoOrdine(DBConnection.getDataSource());
     }
 
