@@ -25,8 +25,8 @@
             if(utenteLoggato){
                 if(cliente.getRuolo_cliente().equals("admin")){
                     %>
-        <a href="<%=ctx%>/Admin/AdmCatalogo.jsp">Ordini</a>
-        <a href="<%=ctx%>/Admin/AdmAdd.jsp">Aggiungi Prodotto</a>
+        <a href="<%=ctx%>/admin/AdmOrdini.jsp">Ordini</a>
+        <a href="<%=ctx%>/admin/AdmAdd.jsp">Aggiungi Prodotto</a>
 
         <%
                 }
@@ -73,5 +73,4 @@
     <% } %>
 </div>
 
-<!-- OVERLAY UTENTE -->
 <script src="scripts/user-overlay.js"></script>
