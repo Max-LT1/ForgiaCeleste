@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: leona
-  Date: 15/07/2026
-  Time: 16:15
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="model.Client"%>
 
@@ -12,13 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatalogoAdmin</title>
+    <title>Catalogo Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../styles/style.css">
-    <link rel="stylesheet" type="text/css" href="../styles/AddProdoct.css">
     <link rel="stylesheet" type="text/css" href="../styles/search-bar.css">
+    <link rel="stylesheet" type="text/css" href="../styles/AddProdoct.css">
     <title>Title</title>
 </head>
 <body>
@@ -34,7 +27,7 @@
 <jsp:include page="../nav-bar.jsp"/>
 <main class="auth-page">
     <div class="container">
-        <section id="AddCard" class="card auth-card active-card" aria-labelledby="loginTitle">
+        <section id="AddCard" class="add-product-card" aria-labelledby="loginTitle">
             <h2 id="loginTitle">Aggiungi</h2>
             <!-- LoginServlet-->
             <form class="input-form" id="AddForm" action="<%=request.getContextPath()%>/addProdotto" method="post">
@@ -125,7 +118,7 @@
     </div>
 </main>
 
-
+<script src="../scripts/user-overlay.js"></script>
 
 </body>
 </html>
