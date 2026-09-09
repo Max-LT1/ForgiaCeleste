@@ -3,6 +3,7 @@ package Control;
 
 import DAO.ClienteDAO;
 import DAO.DBConnection;
+import com.password4j.Password;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/Profilo")
+@WebServlet({"/Profilo", "/modificaUtente"})
 public class Serv_profile extends HttpServlet {
     private static final long serialVersionUID = 5L;
     private ClienteDAO clienteDAO;
@@ -33,45 +34,69 @@ public class Serv_profile extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nome = request.getParameter("nome");
-        String cognome = request.getParameter("cognome");
-        String indirizzo = request.getParameter("indirizzo");
-        String citta = request.getParameter("citta");
-        String provincia = request.getParameter("provincia");
-        String cap = request.getParameter("cap");
+        HttpSession session = request.getSession();
+        String servletPath = request.getServletPath();
+
+        switch(servletPath){
+            case "/modificaUtente":
+                try {
+                    modificaUtente(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "/Profilo":
+                try {
+                    Profile(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+        }
+    }
+
+
+    public void Profile(HttpServletRequest req, HttpServletResponse res)
+            throws SQLException, ServletException, IOException{
+        String nome = req.getParameter("nome");
+        String cognome = req.getParameter("cognome");
+        String indirizzo = req.getParameter("indirizzo");
+        String citta = req.getParameter("citta");
+        String provincia = req.getParameter("provincia");
+        String cap = req.getParameter("cap");
 
         if (!nome.matches("^[a-zA-Z]{1,50}$")) {
             String errorMessage = "Invalid nome (1-50 characters)";
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
             return;
         }
         if (!cognome.matches("^[a-zA-Z]{1,50}$")) {
             String errorMessage = "Invalid cognome (1-50 characters)";
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
             return;
         }
 
         // Validate indirizzo
         if (!indirizzo.matches("^[a-zA-Z0-9 ]{1,100}$")) {
             String errorMessage = "Invalid indirizzo (1-100 characters)";
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
             return;
         }
 
         // Validate citta
         if (!citta.matches("^[a-zA-Z]{1,50}$") || !provincia.matches("^[a-zA-Z]{1,50}$")) {
             String errorMessage = "Invalid indirizzo (1-50 characters)";
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
             return;
         }
 
         // Get the cliente ID from the session
-        HttpSession session = request.getSession();
+        HttpSession session = req.getSession();
         Client cliente = ((Client) session.getAttribute("cliente"));
 
         if (cliente == null) {
             // Cliente is not authenticated, redirect to login page or show an error message
-            response.sendRedirect("login.jsp");
+            res.sendRedirect("login.jsp");
             return;
         }
 
@@ -92,13 +117,52 @@ public class Serv_profile extends HttpServlet {
             // Update the cliente object in the session
             session.setAttribute("cliente", cliente);
             // Redirect to the profile page with a success message
-            response.sendRedirect("ProfiloUtente.jsp");
+            res.sendRedirect("ProfiloUtente.jsp");
         } catch (SQLException e) {
             // Redirect to the profile page with an error message
-            response.sendRedirect("ProfiloUtente.jsp");
+            res.sendRedirect("ProfiloUtente.jsp");
         }
     }
 
+
+    public void modificaUtente(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException, SQLException {
+        String originalUsername = req.getParameter("Ogusername");
+        String nome = req.getParameter("nome");
+        String cognome = req.getParameter("cognome");
+        String username = req.getParameter("username");
+        String email = req.getParameter("email");
+        String indirizzo = req.getParameter("indirizzo");
+        String citta = req.getParameter("citta");
+        String provincia = req.getParameter("provincia");
+        String Ogpsw = req.getParameter("pswAttuale");
+        String newpsw = req.getParameter("NuovaPassword");
+
+
+        Client cliente = clienteDAO.getClienteByUsername(originalUsername);
+        if(Password.check(Ogpsw, cliente.getPassword()).withArgon2()){
+            cliente.setUsername(username);
+            cliente.setEmail(email);
+            cliente.setNome(nome);
+            cliente.setCognome(cognome);
+            cliente.setIndirizzo(indirizzo);
+            cliente.setCitta(citta);
+            cliente.setProvincia(provincia);
+            if(newpsw != null){
+                cliente.setPassword(newpsw);
+            }
+            try {
+                clienteDAO.updateCliente(cliente);
+                req.getRequestDispatcher("index.jsp").forward(req, res);
+            } catch (SQLException e) {
+                res.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            }
+        }else {
+            res.sendRedirect("user-area.jsp");
+        }
+
+
+    }
 
     public void init() throws ServletException {
         dataSource = DBConnection.getDataSource();
