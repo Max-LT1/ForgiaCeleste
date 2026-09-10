@@ -44,6 +44,7 @@
     String citta = escapeHtml(cliente.getCitta());
     String email = escapeHtml(cliente.getEmail());
     String indirizzo = escapeHtml(cliente.getIndirizzo());
+    String cap = escapeHtml(cliente.getCap());
 
 %>
 
@@ -66,7 +67,7 @@
     <div class="container">
         <section id="UserDataCard" class="card auth-card active-card">
             <h2 id="utente-Title">AREA UTENTE</h2>
-            <form action="${pageContext.request.contextPath}/modificaUtente" method="post">
+            <form action="${pageContext.request.contextPath}/modificaUtente" method="post" id="modifyform">
                 <input type="hidden" id="Ogusername" name="Ogusername" value="<%= username%>">
                 <div class="anagrafica">
 
@@ -97,6 +98,10 @@
                             provincia
                         </label>
                         <input id="provincia" type="text" name="provincia" value="<%=provincia%>"><br>
+                        <label for="cap">
+                            Cap
+                        </label>
+                        <input id="cap" type="text" name="cap" value="<%= cap%>"><br>
                         <label for="indirizzo">
                             indirizzo
                         </label>
@@ -112,12 +117,16 @@
                         </label>
                         <input id="NuovaPassword" type="text" name="NuovaPassword"><br>
                     </div>
-                    <input type="submit" value="modify" formaction="modificaUtente">
-
+                    <button type="submit" class="btn" formaction="modificaUtente">
+                        Modifica
+                    </button>
                 </div>
             </form>
         </section>
     </div>
 </main>
+
+
+<script src="scripts/user-area.js"></script>
 </body>
 </html>
