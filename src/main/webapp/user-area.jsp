@@ -1,12 +1,6 @@
 <%@ page import="model.Client" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Luca Giammattei
-  Date: 18/07/2026
-  Time: 13:44
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%!
     private String escapeHtml(String valore) {
         if (valore == null) {
@@ -20,6 +14,7 @@
                 .replace("\"", "&quot;")
                 .replace("'", "&#39;");
     }
+
     private String normalizzaPercorso(String percorso) {
         if (percorso == null) {
             return "";
@@ -38,12 +33,12 @@
 <%
     Client cliente = (Client)session.getAttribute("cliente");
     String name = escapeHtml(cliente.getNome());
-    String cognome = escapeHtml(cliente.getCognome());
-    String provincia = escapeHtml(cliente.getProvincia());
+    String surname = escapeHtml(cliente.getCognome());
+    String province = escapeHtml(cliente.getProvincia());
     String username = escapeHtml(cliente.getUsername());
-    String citta = escapeHtml(cliente.getCitta());
+    String city = escapeHtml(cliente.getCitta());
     String email = escapeHtml(cliente.getEmail());
-    String indirizzo = escapeHtml(cliente.getIndirizzo());
+    String address = escapeHtml(cliente.getIndirizzo());
     String cap = escapeHtml(cliente.getCap());
 
 %>
@@ -58,69 +53,148 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="./styles/user-area.css">
-    <link rel="stylesheet" href="./styles/style-home.css">
     <link rel="stylesheet" href="styles/search-bar.css">
 </head>
 <body>
 <jsp:include page="nav-bar.jsp" />
-<main>
+<main class="user-page">
     <div class="container">
-        <section id="UserDataCard" class="card auth-card active-card">
+        <section id="UserDataCard" class="card user-card">
             <h2 id="utente-Title">AREA UTENTE</h2>
-            <form action="${pageContext.request.contextPath}/modificaUtente" method="post" id="modifyform">
-                <input type="hidden" id="Ogusername" name="Ogusername" value="<%= username%>">
-                <div class="anagrafica">
 
-                    <label for="username">
+            <form class="input-form" id="modifyForm" action="${pageContext.request.contextPath}/modificaUtente" method="post" >
+                <div class="input-group">
+                    <label for="currentUsername">
                         Username
                     </label>
-                    <input id="username" type="text" name="username" value="<%= username%>"><br>
-                    <label for="name">
-                        Nome
-                    </label>
-                    <input id="name" type="text" name="nome" value="<%= name%>"><br>
-                    <label for="cognome">
-                        cognome
-                    </label>
-                    <input id="cognome" type="text" name="cognome" value="<%= cognome%>"><br>
-                    <label for="email">
-                        email
-                    </label>
-                    <input id="email" type="email" name="email" value="<%= email%>"><br>
+                    <input
+                            id="currentUsername"
+                            type="text"
+                            name="username"
+                            autocomplete="username"
+                            placeholder="Inserisci il tuo username"
+                            value="<%=username%>"
+                            required>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label for="currentName">
+                            Nome
+                        </label>
+                        <input
+                                id="currentName"
+                                type="text"
+                                name="nome"
+                                autocomplete="given-name"
+                                value="<%=name%>"
+                                required>
 
-                    <div class="residenza">
-
-                        <label for="citta">
-                            città
+                        <label for="currentSurname">
+                            Cognome
                         </label>
-                        <input id="citta" type="text" name="citta" value="<%= citta%>"><br>
-                        <label for="provincia">
-                            provincia
-                        </label>
-                        <input id="provincia" type="text" name="provincia" value="<%=provincia%>"><br>
-                        <label for="cap">
-                            Cap
-                        </label>
-                        <input id="cap" type="text" name="cap" value="<%= cap%>"><br>
-                        <label for="indirizzo">
-                            indirizzo
-                        </label>
-                        <input id="indirizzo" type="text" name="indirizzo" value="<%=indirizzo%>"><br>
+                        <input
+                                id="currentSurname"
+                                type="text"
+                                name="cognome"
+                                value="<%=surname%>"
+                                autocomplete="family-name"
+                                required>
                     </div>
-                    <div class="password">
-                        <label for="passwordAttuale">
+                </div>
+                <div class="input-group">
+                    <label for="currentEmail">
+                        Email
+                    </label>
+                    <input
+                            id="currentEmail"
+                            type="email"
+                            name="email"
+                            autocomplete="email"
+                            value="<%=email%>"
+                            required>
+                </div>
+                <div class="input-group">
+                    <label for="currentAddress">
+                        Indirizzo
+                    </label>
+                    <input
+                            id="currentAddress"
+                            type="text"
+                            name="indirizzo"
+                            autocomplete="street-address"
+                            value="<%=address%>"
+                            required>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label for="currentCity">
+                            Città
+                        </label>
+                        <input
+                                id="currentCity"
+                                type="text"
+                                name="citta"
+                                autocomplete="address-level2"
+                                value="<%=city%>"
+                                required>
+                    </div>
+                    <div class="input-group">
+                        <label for="currentProvince">
+                            Provincia
+                        </label>
+                        <input
+                                id="currentProvince"
+                                type="text"
+                                name="provincia"
+                                maxlength="2"
+                                placeholder="RM"
+                                autocomplete="address-level1"
+                                value="<%=province%>"
+                                required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="currentCap">
+                        CAP
+                    </label>
+                    <input
+                            id="currentCap"
+                            type="text"
+                            name="cap"
+                            maxlength="5"
+                            pattern="[0-9]{5}"
+                            inputmode="numeric"
+                            autocomplete="postal-code"
+                            value="<%=cap%>"
+                            required>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label for="currentPassword">
                             Password
                         </label>
-                        <input id="passwordAttuale" type="text" name="pswAttuale" required><br>
-                        <label for="NuovaPassword">
-                            NuovaPassword
-                        </label>
-                        <input id="NuovaPassword" type="text" name="NuovaPassword"><br>
+                        <input
+                                id="currentPassword"
+                                type="password"
+                                name="password"
+                                autocomplete="new-password"
+                                required>
                     </div>
-                    <button type="submit" class="btn" formaction="modificaUtente">
-                        Modifica
-                    </button>
+                    <div class="input-group">
+                        <label for="confirmCurrentPassword">
+                            Conferma password
+                        </label>
+                        <input
+                                id="confirmCurrentPassword"
+                                type="password"
+                                name="confermaPassword"
+                                autocomplete="new-password"
+                                required>
+                    </div>
                 </div>
+                <button type="submit" class="btn" formaction="${pageContext.request.contextPath}/modificaUtente">
+                    Modifica
+                </button>
             </form>
         </section>
     </div>
@@ -128,5 +202,6 @@
 
 
 <script src="scripts/user-area.js"></script>
+
 </body>
 </html>
