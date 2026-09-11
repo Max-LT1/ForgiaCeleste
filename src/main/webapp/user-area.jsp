@@ -63,6 +63,7 @@
             <h2 id="utente-Title">AREA UTENTE</h2>
 
             <form class="input-form" id="modifyForm" action="${pageContext.request.contextPath}/modificaUtente" method="post" >
+                <input type="hidden" value="<%=username%>" id="OriginalUsername" name="OriginalUsername">
                 <div class="input-group">
                     <label for="currentUsername">
                         Username

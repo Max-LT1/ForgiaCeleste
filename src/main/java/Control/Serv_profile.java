@@ -127,11 +127,11 @@ public class Serv_profile extends HttpServlet {
 
     public void modificaUtente(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException, SQLException {
-        String originalUsername = req.getParameter("Ogusername");
+        String originalUsername = req.getParameter("OriginalUsername");
         String nome = req.getParameter("nome");
         String cognome = req.getParameter("cognome");
         String username = req.getParameter("username");
-        String email = req.getParameter("email");
+        String email = req.getParameter("currentEmail");
         String indirizzo = req.getParameter("indirizzo");
         String citta = req.getParameter("citta");
         String provincia = req.getParameter("provincia");
