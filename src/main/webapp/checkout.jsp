@@ -23,7 +23,8 @@
             <p class="auth-description">
                 Compila i campi per terminare il checkout.
             </p>
-            <form class="input-form" id="checkoutForm" action="" method="post">
+            <form class="input-form" id="checkoutForm" action="Checkout" method="post">
+                <input type="hidden" name="clientToken" value="${sessionScope.sessionToken}">
                 <div class="row">
                     <div class="input-group">
                         <label for="registerName">

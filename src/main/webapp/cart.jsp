@@ -58,6 +58,7 @@
             <%
                 List<Composizione> composizioni = null;
                 Client cliente = (Client)session.getAttribute("cliente");
+                boolean utenteLoggato = cliente != null;
                 if (cliente == null) {
                     composizioni = (List<Composizione>) session.getAttribute("carrelloNoLog");
 
@@ -134,9 +135,18 @@
             </div>
             <div class="cart-actions">
                 <button id="clearCartButton" class="secondary-button danger-button" type="button">Svuota carrello</button>
+                <%
+                    if(utenteLoggato){
+                    session.setAttribute("prezzoTotale", prezzoTotale);
+                %>
                 <a href="checkout.jsp" class="primary-button checkout-button">Passa al checkout</a>
+                <%
+                    }else{
+                %>
+                <a href="log-sign.jsp" class="primary-button checkout-button">Effettua il login</a>
             </div>
             <%
+                }
                 }
             %>
         </div>

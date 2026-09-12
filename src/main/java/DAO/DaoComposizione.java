@@ -194,5 +194,16 @@ public class DaoComposizione {
             statement.executeUpdate();
         }
     }
+    public void removeAllComposizioniByUser(String username, String email) throws SQLException {
+        String query = "DELETE FROM composizione WHERE username_cli = ? AND email_cli = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, username);
+            statement.setString(2, email);
+            statement.executeUpdate();
+        }
+    }
+
 
 }

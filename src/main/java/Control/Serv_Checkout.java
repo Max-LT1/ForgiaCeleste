@@ -31,7 +31,8 @@ public class Serv_Checkout extends HttpServlet {
         HttpSession session = request.getSession();
         String sessionToken = ((String) session.getAttribute("sessionToken"));
         String clientToken = (request.getParameter("clientToken"));
-        BigDecimal totalPrice = new BigDecimal(request.getParameter("prezzoTotale"));
+        BigDecimal totalPrice = (BigDecimal) session.getAttribute("prezzoTotale");
+        session.removeAttribute("prezzoTotale");
 
         Client cliente = (Client) session.getAttribute("cliente");
         java.sql.Date localDate = new java.sql.Date(System.currentTimeMillis());
@@ -64,9 +65,10 @@ public class Serv_Checkout extends HttpServlet {
 
             return;
         }
-        String numeroCarta = request.getParameter("numeroCarta");
-        String titolareConto = request.getParameter("titolareConto");
-        String dataScadenzaString = request.getParameter("dataScadenza");
+        String numeroCarta = request.getParameter("numero");
+        String titolareConto = cliente.getNome() + " " + cliente.getCognome();
+
+        String dataScadenzaString = "20"+request.getParameter("anno") + "-" + request.getParameter("mese") +"-01";
         java.util.Date utilDate = null;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -97,7 +99,7 @@ public class Serv_Checkout extends HttpServlet {
         if (!dataScadenzaString.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
             String errorMessage = "La data di scadenza deve essere nel formato corretto (YYYY-MM-DD).";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            request.getRequestDispatcher("Cart.jsp").forward(request, response);
             return;
         }
 
@@ -105,7 +107,7 @@ public class Serv_Checkout extends HttpServlet {
         if (titolareConto.trim().isEmpty()) {
             String errorMessage = "Inserisci il titolare del conto.";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            request.getRequestDispatcher("Cart.jsp").forward(request, response);
             return;
         }
 
@@ -166,30 +168,37 @@ public class Serv_Checkout extends HttpServlet {
                 response.sendError(500, errorMessage);
                 return;
             }
-            session.setAttribute("carrello", null);
         }
+        session.setAttribute("carrello", null);
 
+        // --- pagamento ---
         Pagamento pagamento = new Pagamento();
-        pagamento.setIdPagamento(0); // o l'ID appropriato se ne hai uno
-        pagamento.setDataPagamento(localDate); // Imposta la data di pagamento come la data corrente
-        pagamento.setImportoPagamento(totalPrice); // Imposta l'importo del pagamento con il prezzo totale
-        pagamento.setNumeroCarta(numeroCarta); // Ottieni il numero di carta dalla richiesta, se
-        // è presente
-
-        pagamento.setDataScadenza(dataScadenza); // Ottieni la data di scadenza dalla richiesta, se è presente
-        pagamento.setTitolareConto(titolareConto); // Ottieni il titolare del conto dalla
-        // richiesta, se è presente
-        pagamento.setIdOrdine(ordineId); // Imposta l'ID dell'ordine associato al pagamento
+        pagamento.setIdPagamento(0);
+        pagamento.setDataPagamento(localDate);
+        pagamento.setImportoPagamento(totalPrice);
+        pagamento.setNumeroCarta(numeroCarta);
+        pagamento.setDataScadenza(dataScadenza);
+        pagamento.setTitolareConto(titolareConto);
+        pagamento.setIdOrdine(ordineId);
 
         try {
+            // inserisco il pagamento UNA sola volta
             pagamentoDAO.insertPagamento(pagamento);
+
+            // 🔥 ELIMINO TUTTE LE COMPOSIZIONI DAL DATABASE PER QUESTO UTENTE
+            composizioneDAO.removeAllComposizioniByUser(cliente.getUsername(), cliente.getEmail());
+
+            // 🔥 SVUOTO IL CARRELLO IN SESSIONE
+            session.setAttribute("carrello", null);
+
         } catch (SQLException e) {
             String errorMessage = "There was an error in saving the payment data to the database";
             response.sendError(500, errorMessage);
             return;
         }
 
-        response.sendRedirect("");
+// metti una pagina vera qui, non stringa vuota
+        request.getRequestDispatcher("HomePage").forward(request, response);
     }
 
     @Override
