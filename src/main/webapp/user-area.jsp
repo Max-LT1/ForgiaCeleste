@@ -182,15 +182,25 @@
                                 required>
                     </div>
                     <div class="input-group">
-                        <label for="confirmCurrentPassword">
-                            Conferma password
+                        <label for="NewPassword">
+                            Nuova Password
                         </label>
                         <input
-                                id="confirmCurrentPassword"
+                                id="NewPassword"
                                 type="password"
-                                name="confermaPassword"
-                                autocomplete="new-password"
-                                required>
+                                name="NewPassword"
+                                autocomplete="new-password">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confermaNewpsw">
+                            Conferma Password
+                        </label>
+                        <input
+                            id="confermanewPsw"
+                            type="password"
+                            name="confermanewPsw"
+                            autocomplete="new-password">
                     </div>
                 </div>
                 <button type="submit" class="btn" formaction="${pageContext.request.contextPath}/modificaUtente">

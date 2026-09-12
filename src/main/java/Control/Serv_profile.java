@@ -3,6 +3,7 @@ package Control;
 
 import DAO.ClienteDAO;
 import DAO.DBConnection;
+import com.mysql.cj.Session;
 import com.password4j.Password;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -128,6 +129,7 @@ public class Serv_profile extends HttpServlet {
     public void modificaUtente(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException, SQLException {
         String originalUsername = req.getParameter("OriginalUsername");
+        String confermapsw = req.getParameter("confermaNewpsw");
         String nome = req.getParameter("nome");
         String cognome = req.getParameter("cognome");
         String username = req.getParameter("username");
@@ -136,7 +138,7 @@ public class Serv_profile extends HttpServlet {
         String citta = req.getParameter("citta");
         String provincia = req.getParameter("provincia");
         String Ogpsw = req.getParameter("pswAttuale");
-        String newpsw = req.getParameter("NuovaPassword");
+        String newpsw = req.getParameter("NewPassword");
 
 
         Client cliente = clienteDAO.getClienteByUsername(originalUsername);
@@ -148,8 +150,8 @@ public class Serv_profile extends HttpServlet {
             cliente.setIndirizzo(indirizzo);
             cliente.setCitta(citta);
             cliente.setProvincia(provincia);
-            if(newpsw != null){
-                cliente.setPassword(newpsw);
+            if(newpsw != null && newpsw.equals(confermapsw)){
+                cliente.setPassword(Password.hash(newpsw).addRandomSalt().withArgon2().getResult());
             }
             try {
                 clienteDAO.updateCliente(cliente);
