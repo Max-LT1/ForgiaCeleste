@@ -55,7 +55,7 @@ public class DaoComposizione {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     int quantita = resultSet.getInt("quantita");
-                    int idProdotto = resultSet.getInt("ID_prodotto");
+                    int idProdotto = resultSet.getInt("id_prodotto");
                     String username_cli = resultSet.getString("username_cli");
                     String email_cli = resultSet.getString("email_cli");
                     // Altri campi da recuperare se necessario
@@ -182,4 +182,17 @@ public class DaoComposizione {
             statement.executeUpdate();
         }
     }
+
+    public void doSave(String username, String email, int idProdotto, int quantita) throws SQLException {
+        String query = "INSERT INTO composizione (id_prodotto, quantita, id_ordine, username_cli, email_cli) VALUES (?, ?, NULL, ?, ?)";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idProdotto);
+            statement.setInt(2, quantita);
+            statement.setString(3, username);
+            statement.setString(4, email);
+            statement.executeUpdate();
+        }
+    }
+
 }

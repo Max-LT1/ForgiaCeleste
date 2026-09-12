@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             let risposta;
             if(isPresent){
-                risposta = await inviaJson(endpointAggiornamento, {prodottoId: idProdotto, quantita: quantita});
+                risposta = await inviaJson(endpointAggiornamento, {idProdotto: idProdotto, quantita: quantita});
             }else{
                 risposta = await inviaJson(endpointAggiunta, {idProdotto: idProdotto, quantita: quantita});
             }
@@ -102,21 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function inizializzaNormalProduct(){
-
-    }
-
-    function inizializzaModify(){
-
-    }
-
-
     async function aggiornaQuantitaCarrello(idProdotto, quantita
     ) {
         const quantitaNormalizzata = normalizzaQuantita(quantita);
         const risposta = await inviaJson(endpointAggiornamento,
             {
-                prodottoId: idProdotto,
+                idProdotto: idProdotto,
                 quantita: quantitaNormalizzata
             }
         );
