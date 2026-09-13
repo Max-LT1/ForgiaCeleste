@@ -74,7 +74,8 @@ public class Serv_adm extends HttpServlet {
                 String material = request.getParameter("material");
                 String ogcat;
                 String tipo = request.getParameter("type");
-                int sconto = Integer.parseInt(request.getParameter("sconto"));
+                String sconto = request.getParameter("sconto");
+                int scon = Integer.parseInt(sconto, 10);
                 String description = request.getParameter("description");
                 BigDecimal price = new BigDecimal(request.getParameter("prezzo"));
 
@@ -89,7 +90,7 @@ public class Serv_adm extends HttpServlet {
                     existingProdotto.setCategoria(category);
                 } else existingProdotto.setCategoria(ogcat);
                 existingProdotto.setTipo(tipo);
-                existingProdotto.setSconto(sconto);
+                existingProdotto.setSconto(scon);
                 existingProdotto.setMateriale(material);
 
                 productDAO.update(existingProdotto);

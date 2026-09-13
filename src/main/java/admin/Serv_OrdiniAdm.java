@@ -64,7 +64,7 @@ public class Serv_OrdiniAdm extends HttpServlet {
             request.setAttribute("productList", productList);
             request.setAttribute("compositionList", compositionList);
 
-            request.getRequestDispatcher("admin/AdminOrdiniPage.jsp").forward(request, response);
+            request.getRequestDispatcher("/Admin/AdmOrdini.jsp").forward(request, response);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "An error occurred while retrieving cliente orders." + e);
