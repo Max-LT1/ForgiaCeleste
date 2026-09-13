@@ -92,8 +92,8 @@ public class Serv_adm extends HttpServlet {
                 existingProdotto.setTipo(tipo);
                 existingProdotto.setSconto(scon);
                 existingProdotto.setMateriale(material);
-
                 productDAO.update(existingProdotto);
+
                 request.getRequestDispatcher("/SingleItem?id=" + productId).forward(request, response);
             } catch (SQLException e) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,

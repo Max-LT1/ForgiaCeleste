@@ -56,7 +56,7 @@
             );
 
     Integer valoreSconto =
-            (Integer) request.getAttribute("sconto");
+            (Integer) prodotto.getSconto();
 
     int sconto = valoreSconto != null ? valoreSconto : 0;
 

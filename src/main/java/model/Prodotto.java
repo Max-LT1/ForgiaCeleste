@@ -116,4 +116,21 @@ public class Prodotto {
     public void setSconto(int sconto){
         this.sconto = sconto;
     }
+
+    @Override
+    public String toString() {
+        return "Prodotto{" +
+                "descrizione='" + descrizione + '\'' +
+                ", idProdotto=" + idProdotto +
+                ", iva=" + iva +
+                ", nomeProdotto='" + nomeProdotto + '\'' +
+                ", path_immagine='" + path_immagine + '\'' +
+                ", prezzo=" + prezzo +
+                ", materiale='" + materiale + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", dataInserimento=" + dataInserimento +
+                ", sconto=" + sconto +
+                '}';
+    }
 }
