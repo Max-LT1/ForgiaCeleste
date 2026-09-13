@@ -153,19 +153,21 @@ public class ClienteDAO {
         return null;
     }
 
-    public void updateCliente(Client cliente) throws SQLException {
-        String query = "UPDATE Cliente SET nome = ?, cognome = ?, citta = ?, provincia = ?, indirizzo = ?, cap = ? WHERE username = ? AND pwd = ?";
-        try (Connection conn = dataSource.getConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
-            statement.setString(1, cliente.getNome());
-            statement.setString(2, cliente.getCognome());
-            statement.setString(3, cliente.getCitta());
-            statement.setString(4, cliente.getProvincia());
-            statement.setString(5, cliente.getIndirizzo());
-            statement.setString(6, cliente.getCap());
-            statement.setString(7, cliente.getUsername());
-            statement.setString(8, cliente.getPassword());
-
-            statement.executeUpdate();
+    public void updateCliente(Client cliente, String OgUsername) throws SQLException {
+        String query = "UPDATE Cliente SET username = ?, nome = ?, cognome = ?, citta = ?, provincia = ?, indirizzo = ?, cap = ?, email= ? WHERE username = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, cliente.getUsername());
+            statement.setString(2, cliente.getNome());
+            statement.setString(3, cliente.getCognome());
+            statement.setString(4, cliente.getCitta());
+            statement.setString(5, cliente.getProvincia());
+            statement.setString(6, cliente.getIndirizzo());
+            statement.setString(7, cliente.getCap());
+            statement.setString(8, cliente.getEmail());
+            statement.setString(9, OgUsername);
+            int rows = statement.executeUpdate();
+            System.out.println("UPDATE Cliente → righe modificate: " + rows);
         }
     }
 

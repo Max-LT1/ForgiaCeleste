@@ -105,4 +105,20 @@ public class Client {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "cap='" + cap + '\'' +
+                ", citta='" + citta + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", email='" + email + '\'' +
+                ", indirizzo='" + indirizzo + '\'' +
+                ", nome='" + nome + '\'' +
+                ", password='" + password + '\'' +
+                ", provincia='" + provincia + '\'' +
+                ", ruolo_cliente='" + ruolo_cliente + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

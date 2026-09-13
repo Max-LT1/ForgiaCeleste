@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet({"/modificaUtente"})
+@WebServlet({"/Profilo", "/modificaUtente"})
 public class Serv_profile extends HttpServlet {
     private static final long serialVersionUID = 5L;
     private ClienteDAO clienteDAO;
@@ -35,14 +35,16 @@ public class Serv_profile extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String servletPath = request.getServletPath();
         try {
-            modificaUtente(request, response);
+            modificaUtente(request, response, session);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void modificaUtente(HttpServletRequest req, HttpServletResponse res)
+    public void modificaUtente(HttpServletRequest req, HttpServletResponse res, HttpSession session)
             throws ServletException, IOException, SQLException {
         String originalUsername = req.getParameter("originalUsername");
         String nome = req.getParameter("nome");
@@ -69,7 +71,8 @@ public class Serv_profile extends HttpServlet {
                 cliente.setPassword(Password.hash(newpsw).addRandomSalt().withArgon2().getResult());
             }
             try {
-                clienteDAO.updateCliente(cliente);
+                clienteDAO.updateCliente(cliente, originalUsername);
+                session.setAttribute("cliente", cliente);
                 req.getRequestDispatcher("HomePage").forward(req, res);
             } catch (SQLException e) {
                 res.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
