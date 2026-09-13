@@ -128,8 +128,7 @@ public class Serv_profile extends HttpServlet {
 
     public void modificaUtente(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException, SQLException {
-        String originalUsername = req.getParameter("OriginalUsername");
-        String confermapsw = req.getParameter("confermaNewpsw");
+        String originalUsername = req.getParameter("originalUsername");
         String nome = req.getParameter("nome");
         String cognome = req.getParameter("cognome");
         String username = req.getParameter("username");
@@ -137,8 +136,9 @@ public class Serv_profile extends HttpServlet {
         String indirizzo = req.getParameter("indirizzo");
         String citta = req.getParameter("citta");
         String provincia = req.getParameter("provincia");
-        String Ogpsw = req.getParameter("pswAttuale");
-        String newpsw = req.getParameter("NewPassword");
+        String Ogpsw = req.getParameter("currentPassword");
+        String newpsw = req.getParameter("newPassword");
+        String confermapsw = req.getParameter("confirmNewPassword");
 
 
         Client cliente = clienteDAO.getClienteByUsername(originalUsername);
