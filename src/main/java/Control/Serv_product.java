@@ -30,6 +30,10 @@ public class Serv_product extends HttpServlet {
         daoProdotto = new DaoProdotto(dataSource);
     }
 
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        doGet(req, resp);
+    }
+
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         String servletPath = req.getServletPath();
