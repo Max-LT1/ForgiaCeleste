@@ -56,14 +56,16 @@
     <link rel="stylesheet" href="styles/search-bar.css">
 </head>
 <body>
+
 <jsp:include page="nav-bar.jsp" />
+
 <main class="user-page">
     <div class="container">
         <section id="UserDataCard" class="card user-card">
             <h2 id="utente-Title">AREA UTENTE</h2>
 
             <form class="input-form" id="modifyForm" action="${pageContext.request.contextPath}/modificaUtente" method="post" >
-                <input type="hidden" value="<%=username%>" id="OriginalUsername" name="OriginalUsername">
+                <input type="hidden" value="<%=username%>" id="originalUsername" name="originalUsername">
                 <div class="input-group">
                     <label for="currentUsername">
                         Username
@@ -126,19 +128,19 @@
                             value="<%=address%>"
                             required>
                 </div>
+                <div class="input-group">
+                    <label for="currentCity">
+                        Città
+                    </label>
+                    <input
+                            id="currentCity"
+                            type="text"
+                            name="citta"
+                            autocomplete="address-level2"
+                            value="<%=city%>"
+                            required>
+                </div>
                 <div class="row">
-                    <div class="input-group">
-                        <label for="currentCity">
-                            Città
-                        </label>
-                        <input
-                                id="currentCity"
-                                type="text"
-                                name="citta"
-                                autocomplete="address-level2"
-                                value="<%=city%>"
-                                required>
-                    </div>
                     <div class="input-group">
                         <label for="currentProvince">
                             Provincia
@@ -153,53 +155,52 @@
                                 value="<%=province%>"
                                 required>
                     </div>
+                    <div class="input-group">
+                        <label for="currentCap">
+                            CAP
+                        </label>
+                        <input
+                                id="currentCap"
+                                type="text"
+                                name="cap"
+                                maxlength="5"
+                                pattern="[0-9]{5}"
+                                inputmode="numeric"
+                                autocomplete="postal-code"
+                                value="<%=cap%>"
+                                required>
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label for="currentCap">
-                        CAP
+                    <label for="currentPassword">
+                        Password attuale
                     </label>
                     <input
-                            id="currentCap"
-                            type="text"
-                            name="cap"
-                            maxlength="5"
-                            pattern="[0-9]{5}"
-                            inputmode="numeric"
-                            autocomplete="postal-code"
-                            value="<%=cap%>"
+                            id="currentPassword"
+                            type="password"
+                            name="currentPassword"
+                            autocomplete="current-password"
                             required>
                 </div>
                 <div class="row">
-                    <div class="input-group">
-                        <label for="currentPassword">
-                            Password
-                        </label>
-                        <input
-                                id="currentPassword"
-                                type="password"
-                                name="password"
-                                autocomplete="new-password"
-                                required>
-                    </div>
                     <div class="input-group">
                         <label for="NewPassword">
                             Nuova Password
                         </label>
                         <input
                                 id="NewPassword"
-                                type="password"
-                                name="NewPassword"
+                                type="text"
+                                name="newPassword"
                                 autocomplete="new-password">
                     </div>
-
                     <div class="input-group">
-                        <label for="confermaNewpsw">
-                            Conferma Password
+                        <label for="confirmNewPassword">
+                            Conferma Nuova Password
                         </label>
                         <input
-                            id="confermanewPsw"
-                            type="password"
-                            name="confermanewPsw"
+                            id="confirmNewPassword"
+                            type="text"
+                            name="confirmNewPassword"
                             autocomplete="new-password">
                     </div>
                 </div>
@@ -212,7 +213,7 @@
 </main>
 
 
-<script src="scripts/user-area.js"></script>
+<script src="./scripts/user-area.js"></script>
 
 </body>
 </html>
