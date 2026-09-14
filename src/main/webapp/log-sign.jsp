@@ -67,9 +67,6 @@
                             type="checkbox"
                             id="remember"
                             name="remember">
-                    <label for="remember">
-                        Ricordami
-                    </label>
                 </div>
                 <button type="submit" class="btn">
                     LOGIN

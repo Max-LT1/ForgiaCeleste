@@ -34,11 +34,6 @@
         %>
 
 
-
-        <a href="<%= ctx %>/contacts.jsp">Contatti</a>
-
-
-
     </nav>
     <div class="user-area">
         <span class="icon-user" id="user-icon" role="button" tabindex="0" aria-label="Apri area utente">👤</span>
