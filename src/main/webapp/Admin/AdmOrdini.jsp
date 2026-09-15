@@ -120,6 +120,7 @@
                         </span>
                     </div>
                 </section>
+            </article>
                 <%
                 }
             %>
