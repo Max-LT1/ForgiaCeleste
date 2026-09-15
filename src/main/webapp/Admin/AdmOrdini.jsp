@@ -1,25 +1,15 @@
-```jsp
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="model.Ordine" %>
-<%@ page import="java.math.BigDecimal" %>
-<%@ page import="model.Prodotto" %>
-<%@ page import="model.Composizione" %>
 
 <%
     String ctx = request.getContextPath();
 
     @SuppressWarnings("unchecked")
     List<Ordine> ordini = (List<Ordine>) request.getAttribute("ordineList");
-
-    @SuppressWarnings("unchecked")
-    List<Prodotto> prodotti = (List<Prodotto>) request.getAttribute("productList");
-
-    @SuppressWarnings("unchecked")
-    List<Composizione> composizioni = (List<Composizione>) request.getAttribute("compositionList");
 
     NumberFormat euroFormat = NumberFormat.getCurrencyInstance(Locale.ITALY);
 
@@ -92,7 +82,7 @@
                     String totaleFormattato = euroFormat.format(ordine.getPrezzoVendita());
             %>
             <article class="order-item">
-                <button
+                <section
                         type="button"
                         class="order-header"
                         aria-expanded="false"
@@ -127,94 +117,10 @@
                         <span
                             class="order-chevron"
                             aria-hidden="true">
-                                ⌄
-                            </span>
+                        </span>
                     </div>
-                </button>
-                <div
-                        id="order-details-<%= idOrdine %>"
-                        class="order-details"
-                        hidden>
-                    <div class="order-details-inner">
-                        <div class="order-products-header">
-                            <span>
-                                Prodotto
-                            </span>
-                            <span>
-                                Quantità
-                            </span>
-                            <span>
-                                Prezzo unitario
-                            </span>
-                            <span>
-                                Totale
-                            </span>
-                        </div>
-                        <div class="order-products">
-                            <%
-                                boolean flag = true;
-                                for(Composizione composizione: composizioni){
-                                    for(Prodotto prodotto : prodotti){
-                                        if(composizione.getIdOrdine() == ordine.getIdOrdine() && prodotto.getIdProdotto() == composizione.getIdProdotto()){
-                                            String nome = prodotto.getNomeProdotto();
-                                            int quantita = composizione.getQuantita_prodotto();
-                                            BigDecimal prezzoUnitario = prodotto.getPrezzo();
-                                            BigDecimal subtotale = prodotto.getPrezzo();
-                                            flag = false;
-                            %>
-                            <div class="order-product">
-                                <div class="product-info">
-                                    <strong>
-                                        <%= nome %>
-                                    </strong>
-                                </div>
-                                <div
-                                    class="product-quantity"
-                                    data-label="Quantità">
-                                        <span>
-                                            <%= quantita %>
-                                        </span>
-                                </div>
-                                <div
-                                    class="product-unit-price"
-                                    data-label="Prezzo unitario">
-                                    <span>
-                                        <%= euroFormat.format(prezzoUnitario) %>
-                                    </span>
-                                </div>
-                                <div
-                                    class="product-subtotal"
-                                    data-label="Totale">
-                                    <strong>
-                                        <%= euroFormat.format(subtotale) %>
-                                    </strong>
-                                </div>
-                            </div>
-                            <%
-                                        }
-                                    }
-                                }
-                                if(flag) {
-                            %>
-                            <div class="empty-order-products">
-                                Nessun prodotto associato a questo ordine.
-                            </div>
-                            <%
-                                }
-                            %>
-                        </div>
-                        <div class="order-details-footer">
-                            <span>
-                                Totale ordine
-                            </span>
-                            <strong>
-                                <%= totaleFormattato %>
-                            </strong>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <%
+                </section>
+                <%
                 }
             %>
         </div>
