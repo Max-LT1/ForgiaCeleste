@@ -62,12 +62,6 @@
                             autocomplete="current-password"
                             required>
                 </div>
-                <div class="remember">
-                    <input
-                            type="checkbox"
-                            id="remember"
-                            name="remember">
-                </div>
                 <button type="submit" class="btn">
                     LOGIN
                 </button>
