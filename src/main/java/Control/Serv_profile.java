@@ -67,7 +67,7 @@ public class Serv_profile extends HttpServlet {
             cliente.setIndirizzo(indirizzo);
             cliente.setCitta(citta);
             cliente.setProvincia(provincia);
-            if(newpsw != null && newpsw.equals(confermapsw)){
+            if(!(newpsw.isEmpty()) && newpsw.equals(confermapsw)){
                 cliente.setPassword(Password.hash(newpsw).addRandomSalt().withArgon2().getResult());
             }
             try {
