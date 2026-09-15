@@ -63,7 +63,6 @@
     <div class="container">
         <section id="UserDataCard" class="card user-card">
             <h2 id="utente-Title">AREA UTENTE</h2>
-
             <form class="input-form" id="modifyForm" action="${pageContext.request.contextPath}/modificaUtente" method="post" >
                 <input type="hidden" value="<%=username%>" id="originalUsername" name="originalUsername">
                 <div class="input-group">
@@ -184,12 +183,12 @@
                 </div>
                 <div class="row">
                     <div class="input-group">
-                        <label for="NewPassword">
+                        <label for="newPassword">
                             Nuova Password
                         </label>
                         <input
-                                id="NewPassword"
-                                type="text"
+                                id="newPassword"
+                                type="password"
                                 name="newPassword"
                                 autocomplete="new-password">
                     </div>
@@ -199,7 +198,7 @@
                         </label>
                         <input
                             id="confirmNewPassword"
-                            type="text"
+                            type="password"
                             name="confirmNewPassword"
                             autocomplete="new-password">
                     </div>
