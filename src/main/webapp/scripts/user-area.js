@@ -56,26 +56,30 @@ function inizializzaModificaDatiUtente(form) {
         );
     });
 
-    if(nuovaPasswordInput.value.length > 0){
-        nuovaPasswordInput.addEventListener("input", () => {
-            validaPassword(nuovaPasswordInput);
-            if (confermaNuovaPasswordInput.value.length > 0) {
-                validaConfermaPassword(
-                    passwordInput,
-                    confermaNuovaPasswordInput
-                );
-            }
-
-            aggiornaIndicatorePassword(nuovaPasswordInput);
-        });
-
-        confermaNuovaPasswordInput.addEventListener("input", () => {
+    nuovaPasswordInput.addEventListener("input", () => {
+        if(nuovaPasswordInput.value !== ""){
+            nuovaPasswordInput.setAttribute("required", true);
+            confermaNuovaPasswordInput.setAttribute("required", true);
+        }else{
+            nuovaPasswordInput.setAttribute("required", false);
+            confermaNuovaPasswordInput.setAttribute("required",false);
+        }
+        validaPassword(nuovaPasswordInput);
+        if (confermaNuovaPasswordInput.value.length > 0) {
             validaConfermaPassword(
-                passwordInput,
+                nuovaPasswordInput,
                 confermaNuovaPasswordInput
             );
-        });
-    }
+        }
+        aggiornaIndicatorePassword(nuovaPasswordInput);
+    });
+
+    confermaNuovaPasswordInput.addEventListener("input", () => {
+        validaConfermaPassword(
+            nuovaPasswordInput,
+            confermaNuovaPasswordInput
+        );
+    });
 
     indirizzoInput.addEventListener("input", () => {
         validaTesto(
@@ -128,11 +132,12 @@ function inizializzaModificaDatiUtente(form) {
 
             validaUsername(usernameInput),
             validaEmail(emailInput),
-            validaPassword(passwordInput),
+            validaCampoObbligatorio(passwordInput),
+            validaPassword(nuovaPasswordInput),
 
             validaConfermaPassword(
-                passwordInput,
-                confermaPasswordInput
+                nuovaPasswordInput,
+                confermaNuovaPasswordInput
             ),
 
             validaTesto(
@@ -232,15 +237,20 @@ function validaEmail(input) {
 
     rimuoviErrore(input);
     return true;
-}
+}x
 
 function validaPassword(input) {
     const valore = input.value;
 
+    if(valore === ""){
+        rimuoviErrore(input);
+        return true;
+    }
+
     if (valore.length < 8) {
         mostraErrore(
             input,
-            "La password deve contenere almeno 8 caratteri."
+            "La nuova password deve contenere almeno 8 caratteri."
         );
         return false;
     }
@@ -248,7 +258,7 @@ function validaPassword(input) {
     if (!/[a-z]/.test(valore)) {
         mostraErrore(
             input,
-            "La password deve contenere almeno una lettera minuscola."
+            "La nuova password deve contenere almeno una lettera minuscola."
         );
         return false;
     }
@@ -256,7 +266,7 @@ function validaPassword(input) {
     if (!/[A-Z]/.test(valore)) {
         mostraErrore(
             input,
-            "La password deve contenere almeno una lettera maiuscola."
+            "La nuova password deve contenere almeno una lettera maiuscola."
         );
         return false;
     }
@@ -264,7 +274,7 @@ function validaPassword(input) {
     if (!/\d/.test(valore)) {
         mostraErrore(
             input,
-            "La password deve contenere almeno un numero."
+            "La nuova password deve contenere almeno un numero."
         );
         return false;
     }
@@ -272,7 +282,7 @@ function validaPassword(input) {
     if (!/[!@#$%^&*(),.?":{}|<>\-_+=/\\[\];']/g.test(valore)) {
         mostraErrore(
             input,
-            "La password deve contenere almeno un carattere speciale."
+            "La nuova password deve contenere almeno un carattere speciale."
         );
         return false;
     }
@@ -282,17 +292,14 @@ function validaPassword(input) {
 
 function validaConfermaPassword(passwordInput, confermaInput) {
     if (confermaInput.value === "") {
-        mostraErrore(
-            confermaInput,
-            "Conferma la password."
-        );
-        return false;
+        rimuoviErrore(confermaInput);
+        return true;
     }
 
     if (passwordInput.value !== confermaInput.value) {
         mostraErrore(
             confermaInput,
-            "Le password non coincidono."
+            "Le password nuove non coincidono."
         );
         return false;
     }
@@ -350,7 +357,6 @@ function mostraErrore(input, messaggio) {
         messaggioErrore.className = "field-error";
         inputGroup.appendChild(messaggioErrore);
     }
-
     messaggioErrore.textContent = messaggio;
 }
 
