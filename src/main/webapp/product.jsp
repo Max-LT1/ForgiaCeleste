@@ -6,6 +6,7 @@
 <%@ page import="java.text.DecimalFormatSymbols" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="model.Client" %>
+<%@ page import="java.math.RoundingMode" %>
 
 <%!
     private String escapeHtml(String valore) {
@@ -46,19 +47,18 @@
             (Prodotto) request.getAttribute("prodotto");
 
     BigDecimal prezzoOriginale =
-            (BigDecimal) request.getAttribute(
-                    "prezzoOriginale"
-            );
+            prodotto.getPrezzo();
+
+
+    int sconto = prodotto.getSconto();
+
+    BigDecimal scontoDecimal = BigDecimal.valueOf(sconto).divide(BigDecimal.valueOf(100));
+    BigDecimal valueSconto = prezzoOriginale.multiply(scontoDecimal);
 
     BigDecimal prezzoFinale =
-            (BigDecimal) request.getAttribute(
-                    "prezzoFinale"
-            );
-
-    Integer valoreSconto =
-            (Integer) prodotto.getSconto();
-
-    int sconto = valoreSconto != null ? valoreSconto : 0;
+            prezzoOriginale.subtract(valueSconto);
+    System.out.println(prezzoFinale);
+    //prezzoFinale = prezzoFinale.setScale(2, RoundingMode.HALF_UP);
 
     if (prodotto == null) {
         response.sendError(
