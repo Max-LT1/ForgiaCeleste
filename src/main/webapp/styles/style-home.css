@@ -33,11 +33,15 @@
     width: 198px;
     height: 358px;
     min-width: 198px;
+    overflow: hidden;
+    border: 1px solid rgba(199, 167, 108, .22);
+    border-radius: 12px;
+    background: var(--codex-card);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, .26);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
     background-color: #D9D2C3;
     color: #151515;
     margin: 1px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 8px rgba(255, 140, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,6 +55,7 @@
     object-fit: cover;
     transition: transform .3s ease;
 }
+
 
 .carousel-container {
     position: relative;
@@ -78,10 +83,6 @@
     cursor: pointer;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
-}
-
-.arrow:hover {
-    background-color: #3D2B1F;
 }
 
 .arrow:hover {
