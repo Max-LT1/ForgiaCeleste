@@ -40,7 +40,9 @@
         <a href="<%= ctx %>/carrelloServ" class="navbar-icon cart-link" aria-label="Apri il carrello">
             <span class="icon-cart" id="cart-icon">🛒</span>
         </a>
+        <a class="open-icon" id= "openMenu" href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a>
     </div>
+
 </header>
 <!-- OVERLAY UTENTE -->
 <div id="user-overlay" class="overlay hidden" role="dialog" aria-label="Area utente">
@@ -66,6 +68,30 @@
     <p class="overlay-message">Accedi al tuo account oppure crea un nuovo profilo.</p>
     <a class="overlay-button primary full-width" href="<%= ctx %>/log-sign.jsp">Accedi / Registrati</a>
     <% } %>
+
 </div>
 
+<div class="side-sidebar">
+    <ul>
+        <li><a href="<%= ctx %>/HomePage">Home</a></li>
+        <li><a href="<%= ctx %>/ContextCheck?categoria=armi">Armi</a></li>
+        <li><a href="<%= ctx %>/ContextCheck?categoria=armature">Armature</a></li>
+        <li><a href="<%= ctx %>/ContextCheck?categoria=scudi">Scudi</a></li>
+        <li><a href="<%= ctx %>/ContextCheck?categoria=accessori">Accessori</a></li>
+
+        <%
+        if(utenteLoggato){
+        %>
+        <li><a href="<%= ctx%>/user-area.jsp">AreaUtente</a></li>
+        <%
+            }else{
+        %>
+        <li><a href="<%= ctx %>/log-sign.jsp">Login/register</a></li>
+        <%
+            }
+        %>
+        <li><a href="<%= ctx %>/carrelloServ">Carello</a></li>
+        <li><a id = "closeMenu" href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+    </ul>
+</div>
 <script src="scripts/user-overlay.js"></script>

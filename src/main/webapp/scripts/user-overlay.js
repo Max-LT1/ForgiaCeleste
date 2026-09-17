@@ -3,6 +3,14 @@
 const userIcon = document.getElementById("user-icon");
 const overlayU = document.getElementById("user-overlay");
 const overlays = [overlayU];
+const menuIcon = document.getElementById("openMenu");
+const closeIcon = document.getElementById("closeMenu");
+menuIcon.addEventListener("click", event =>{
+    showSideBar();
+});
+closeIcon.addEventListener("click", event =>{
+    hideSideBar();
+});
 
 function closeOverlays() {
     overlays.forEach(overlay => overlay.classList.add("hidden"));
@@ -36,3 +44,14 @@ document.addEventListener("keydown", event => {
         closeOverlays();
     }
 });
+
+
+function showSideBar(){
+    const sidebar = document.querySelector('.side-sidebar');
+    sidebar.style.display = 'flex';
+}
+
+function hideSideBar(){
+    const sidebar = document.querySelector('.side-sidebar');
+    sidebar.style.display = 'none';
+}
