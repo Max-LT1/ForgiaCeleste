@@ -3,15 +3,25 @@ function setupCarousel(carouselId) {
     const left = carousel.parentElement.querySelector(".left");
     const right = carousel.parentElement.querySelector(".right");
 
+    let flagR = -1
+    
     left.addEventListener("click", () => {
-        carousel.scrollLeft -= 400;
+        if(carousel.scrollLeft === 0){
+            carousel.scroll(carousel.scrollWidth, 0)
+        }else{
+            carousel.scrollLeft -= 200;
+        }
     });
 
     right.addEventListener("click", () => {
-        carousel.scrollLeft += 400;
+        if(carousel.scrollLeft === flagR){
+            carousel.scroll(0, 0)
+        }else{
+            flagR = carousel.scrollLeft;
+            carousel.scrollLeft += 200;
+        }
     });
 }
 
 setupCarousel("carousel1");
 setupCarousel("carousel2");
-setupCarousel("carousel3");
