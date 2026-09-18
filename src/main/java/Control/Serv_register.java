@@ -34,6 +34,23 @@ public class Serv_register extends HttpServlet {
         client.setCitta(request.getParameter("citta"));
         client.setProvincia(request.getParameter("provincia"));
         client.setCap(request.getParameter("cap"));
+
+        if (!validaTesto( client.getNome(), 2) ||
+                !validaTesto(client.getCognome(), 2) ||
+                !validaUsername(client.getUsername()) ||
+                !validaEmail(client.getEmail()) ||
+                !validaPassword(client.getPassword()) ||
+                !validaTesto(client.getIndirizzo(), 5) ||
+                !validaTesto(client.getCitta(), 2) ||
+                !validaProvincia(client.getProvincia()) ||
+                !validaCap(client.getCap())) {
+
+            request.setAttribute("errorMessage", "Correggi i campi evidenziati prima di registrarti.");
+            request.getRequestDispatcher("/log-sign.jsp").forward(request, response);
+            return;
+        }
+
+
         try {
             clienteDAO.addCliente(client);
             request.getRequestDispatcher("log-sign.jsp").forward(request, response);
@@ -57,4 +74,46 @@ public class Serv_register extends HttpServlet {
         dataSource = DBConnection.getDataSource();
         clienteDAO = new ClienteDAO(dataSource);
     }
+
+    public boolean validaTesto(String valore, int minLength) {
+        if (valore == null || valore.trim().length() < minLength) return false;
+        return valore.matches("^[A-Za-zÀ-ÖØ-öø-ÿ0-9' -]+$");
+    }
+
+    public boolean validaUsername(String username) {
+        if (username == null) return false;
+        return username.matches("^[a-zA-Z0-9_]{3,20}$");
+    }
+
+    public boolean validaEmail(String email) {
+        if (email == null) return false;
+        return email.matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+$");
+    }
+
+    public boolean validaPassword(String password) {
+        if (password == null) return false;
+
+        return password.length() >= 8 &&
+                password.matches(".*[a-z].*") &&
+                password.matches(".*[A-Z].*") &&
+                password.matches(".*\\d.*") &&
+                password.matches(".*[!@#$%^&*(),.?\":{}|<>\\-_+=/\\\\\\[\\];'].*");
+    }
+
+    public boolean validaConfermaPassword(String password, String conferma) {
+        if (conferma == null || conferma.isEmpty()) return false;
+        return password.equals(conferma);
+    }
+
+    public boolean validaProvincia(String provincia) {
+        if (provincia == null) return false;
+        return provincia.toUpperCase().matches("^[A-Z]{2}$");
+    }
+
+    public boolean validaCap(String cap) {
+        if (cap == null) return false;
+        return cap.matches("^\\d{5}$");
+    }
+
+
 }

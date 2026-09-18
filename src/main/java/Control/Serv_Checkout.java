@@ -185,10 +185,8 @@ public class Serv_Checkout extends HttpServlet {
             // inserisco il pagamento UNA sola volta
             pagamentoDAO.insertPagamento(pagamento);
 
-            // 🔥 ELIMINO TUTTE LE COMPOSIZIONI DAL DATABASE PER QUESTO UTENTE
             composizioneDAO.removeAllComposizioniByUser(cliente.getUsername(), cliente.getEmail());
 
-            // 🔥 SVUOTO IL CARRELLO IN SESSIONE
             session.setAttribute("carrello", null);
 
         } catch (SQLException e) {
@@ -197,7 +195,6 @@ public class Serv_Checkout extends HttpServlet {
             return;
         }
 
-// metti una pagina vera qui, non stringa vuota
         request.getRequestDispatcher("HomePage").forward(request, response);
     }
 

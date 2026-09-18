@@ -68,12 +68,9 @@ public class Serv_Rem_prod extends HttpServlet {
                     session.setAttribute("carrello", carrello);
                 }
                 try {
-                    // Svuota DB se hai un metodo dedicato (es. clearComposizioniByCliente)
-                    // composizioneDAO.clearComposizioniByCliente(cliente.getUsername(), cliente.getEmail());
-                } catch (Exception e) {
+               } catch (Exception e) {
                     e.printStackTrace();
-                    successo = false;
-                }
+                    successo = false;}
             }
 
         } else {
