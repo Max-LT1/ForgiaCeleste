@@ -57,7 +57,7 @@ public class Serv_AggiungiCarrello extends HttpServlet {
         Client client = (Client) session.getAttribute("cliente");
 
         if (client != null) {
-            // 🟢 UTENTE LOGGATO: Aggiorna Sessione + Persistenza Database
+
             List<Composizione> carrello = (List<Composizione>) session.getAttribute("carrello");
             if (carrello == null) {
                 carrello = new ArrayList<>();
@@ -96,7 +96,7 @@ public class Serv_AggiungiCarrello extends HttpServlet {
             }
 
         } else {
-            // 🟡 OSPITE: Persistenza solo su Sessione
+
             List<Composizione> carrelloNoLog = (List<Composizione>) session.getAttribute("carrelloNoLog");
             if (carrelloNoLog == null) {
                 carrelloNoLog = new ArrayList<>();

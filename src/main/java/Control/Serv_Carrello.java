@@ -45,7 +45,6 @@ public class Serv_Carrello extends HttpServlet {
         DaoComposizione composizioneDAO = new DaoComposizione(DBConnection.getDataSource());
         DaoProdotto prodottoDAO = new DaoProdotto(DBConnection.getDataSource());
 
-        // 1. RECUPERO CARRELLO (Loggato da DB, Ospite da Sessione)
         if (client != null) {
             try {
                 carrello = composizioneDAO.getComposizioniByUsernameAndEmail(client.getUsername(), client.getEmail());
@@ -62,7 +61,6 @@ public class Serv_Carrello extends HttpServlet {
             }
         }
 
-        // 2. COSTRUZIONE JSON E CALCOLO TOTALI
         int numeroArticoli = 0;
         BigDecimal prezzoTotale = BigDecimal.ZERO;
         JsonArray articoliArray = new JsonArray();
@@ -96,7 +94,7 @@ public class Serv_Carrello extends HttpServlet {
             }
         }
 
-        // 3. INVIO RISPOSTA
+
         if (isJsonRequest) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -107,7 +105,7 @@ public class Serv_Carrello extends HttpServlet {
             jsonResponse.add("articoli", articoliArray);
             response.getWriter().write(new Gson().toJson(jsonResponse));
         } else {
-            request.setAttribute("carrello", carrello); // 👈 PASSATO PER LA JSP (c:forEach)
+            request.setAttribute("carrello", carrello);
             request.setAttribute("prezzoTotale", prezzoTotale);
             request.setAttribute("composizioniJson", articoliArray.toString());
             request.getRequestDispatcher("/cart.jsp").forward(request, response);
