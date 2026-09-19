@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     // Configurazione endpoint Backend
-    // Cambia questi path se le tue servlet hanno nomi leggermente diversi
+
     const ENDPOINTS = {
         AGGIORNA_QUANTITA: 'AggiornaCarrello',
         RIMUOVI_PRODOTTO: 'RimuoviDalCarrello',
